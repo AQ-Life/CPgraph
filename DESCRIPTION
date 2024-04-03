@@ -1,0 +1,18 @@
+Package: gmtplot
+Type: Package
+Title: Generate Geometric Mean Titer Plot in Immunogenicity
+Version: 1.0
+Author: Qi
+Maintainer: Qi <qi_luo2020@163.com>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1
+Depends: 
+    R (>= 4.0.0),
+    tidyverse (>= 2.0.0)
+Imports: 
+    plyr,
+    scales

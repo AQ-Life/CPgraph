@@ -1,0 +1,33 @@
+rm(list = ls())
+options(digits = 4)
+library(haven)
+library(devtools)
+
+use_package("package" ="plyr", type = "Imports")
+use_package("package" ="tidyverse", type = "Depends", min_version = "2.0.0")
+use_package("package" ="scales", type = "Imports")
+
+
+devtools::document()
+load_all()
+
+adis <- read_sas("adis.sas7bdat")
+
+a <- adis %>% 
+  gmtdata() %>% 
+  gmtplot("gmt_plot")
+
+
+devtools::build()
+
+devtools::check()
+
+windowsFonts(
+  KT = windowsFont("楷体"),
+  Arial = windowsFont("Arial"),
+  WRYH = windowsFont("微软雅黑"),
+  ArialUnicode = windowsFont("Arial Unicode MS")
+)
+Sys.getlocale(category = "LC_ALL")
+Sys.setlocale(category = "LC_ALL", locale = "")
+
