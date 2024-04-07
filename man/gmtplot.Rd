@@ -4,12 +4,33 @@
 \alias{gmtplot}
 \title{draw GMT plot}
 \usage{
-gmtplot(datain, FigureName)
+gmtplot(
+  datain,
+  GrpVar,
+  AvisintVar,
+  Aval,
+  Base,
+  YLabel,
+  LegendLabel,
+  FigureName
+)
 }
 \arguments{
 \item{datain}{a dataframe or tibble}
 
-\item{FigureName}{a character}
+\item{GrpVar}{group by Column}
+
+\item{AvisintVar}{analysis visit numeric column}
+
+\item{Aval}{analysis value numeric column}
+
+\item{Base}{baseline column}
+
+\item{YLabel}{a character for Y axis label}
+
+\item{LegendLabel}{a vector for Legend label}
+
+\item{FigureName}{a character for figure name}
 }
 \value{
 a figure as ggplot2 object

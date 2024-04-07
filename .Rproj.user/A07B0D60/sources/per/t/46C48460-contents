@@ -12,7 +12,7 @@ gmtplot <- function(datain, FigureName){
   ggplot(datain) +
     geom_col(aes(x = TPTN, y = means, fill = factor(TRTAN)), alpha = 0.3, na.rm = TRUE)+
     geom_jitter(aes(x = TPTN, y = AVAL, color = factor(TRTAN)), na.rm = TRUE)+
-    geom_errorbar(aes(x = TPTN, ymin = yerrl, ymax = yerru), width = .5, size = 0.5)+
+    geom_errorbar(aes(x = TPTN, ymin = yerrl, ymax = yerru), width = .5, linewidth = 0.5)+
     geom_text(aes(x = TPTN, y = 10^5, label = as.character(round(means))), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
     geom_text(aes(x = TPTN, y = 0.25, label = nlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
     geom_text(aes(x = TPTN - 0.5, y = 10^5*3, label = foldlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
