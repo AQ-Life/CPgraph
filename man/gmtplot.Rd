@@ -11,6 +11,7 @@ gmtplot(
   Aval,
   Base,
   YLabel,
+  AvisitLabel,
   LegendLabel,
   FigureName
 )
@@ -27,6 +28,8 @@ gmtplot(
 \item{Base}{baseline column}
 
 \item{YLabel}{a character for Y axis label}
+
+\item{AvisitLabel}{a vector for analysis visit label}
 
 \item{LegendLabel}{a vector for Legend label}
 

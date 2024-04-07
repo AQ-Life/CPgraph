@@ -6,6 +6,7 @@
 #' @param Aval analysis value numeric column
 #' @param Base baseline column
 #' @param YLabel a character for Y axis label
+#' @param AvisitLabel a vector for analysis visit label
 #' @param LegendLabel a vector for Legend label
 #' @param FigureName a character for figure name
 #'
@@ -14,12 +15,12 @@
 #'
 #' @examples
 #' gmtplot(adis,"gmt_plot")
-gmtplot <- function(datain, GrpVar, AvisintVar, Aval, Base, YLabel, LegendLabel, FigureName){
+gmtplot <- function(datain, GrpVar, AvisintVar, Aval, Base, YLabel, AvisitLabel, LegendLabel, FigureName){
   adis1 <- datain %>%
     mutate(Grp = GrpVar,
            Avisitn = AvisintVar,
-           Xp = case_when(AvisintVar == 0 ~ Grp - 0.2,
-                          AvisintVar %in% c(28, 42) ~ Grp + 0.2),
+           Xp = case_when(Avisitn == 0 ~ Grp - 0.2,
+                          Avisitn %in% c(28, 42) ~ Grp + 0.2),
            AVAL = Aval,
            BASE = Base,
            LOGAVAL = log10(AVAL),
@@ -88,7 +89,7 @@ gmtplot <- function(datain, GrpVar, AvisintVar, Aval, Base, YLabel, LegendLabel,
                   label = c(expression(bold("10"^"0")), expression(bold("10"^"1")), expression(bold("10"^"2")), expression(bold("10"^"3")), expression(bold("10"^"4")), expression(bold("10"^"5"))),
                   expand = c(0, 0))+
     scale_x_continuous(breaks = distinct(jitter,Xp)$Xp,
-                       labels = c("D0 ", "D28", "D0 ", "D28", "D0 ", "D28", "D0 ", "D28"))+
+                       labels = rep(AvisitLabel,length(unique(jitter$Grp))))+
     labs(y = YLabel, x = NULL)+
     scale_fill_manual(values = GMTPlotColor(length(unique(jitter$Grp))),
                       guide = "none")+
