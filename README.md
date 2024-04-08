@@ -50,18 +50,18 @@ adis <- adis %>%
 
 gmtplot(datain = adis,
         GrpVar = adis$Gvar,
-        GrpLabel = c("12", "23", "34", "45"),
+        GrpLabel = c("Group A", "Group B", "Group C", "Group D"),
         AvisitnVar = adis$AVISITN,
         AvisintVal = c(0, 28),
         AvisitLabel = c("D0", "D28"),
-          Aval = adis$AVAL,
-          Base = adis$BASE,
-          YLabel = "PRNT50LLL",
-          LegendLabel = c(),
-       colorSet = c("grey", "blue", "grey", "blue"),
-       # LineYN = TRUE,
-       # LegendYN = TRUE,
-          FigureName = "gmt_plot")
+        Aval = adis$AVAL,
+        Base = adis$BASE,
+        YLabel = "PRNT50",
+        LegendLabel = c(),
+        colorSet = c("grey", "blue", "grey", "blue"),
+        # LineYN = TRUE,
+        # LegendYN = TRUE,
+        FigureName = "gmt_plot")
 #> Warning: Removed 686 rows containing missing values (`position_stack()`).
 #> [1] "gmt_plot.png"
 ```
