@@ -6,22 +6,33 @@
 \usage{
 gmtplot(
   datain,
-  GrpVar,
-  AvisintVar,
-  Aval,
-  Base,
-  YLabel,
+  GrpVar = TRTAN,
+  GrpLabel,
+  AvisitnVar = AVISITN,
+  AvisintVal,
   AvisitLabel,
+  Aval = AVAL,
+  Base = BASE,
+  YLabel,
   LegendLabel,
-  FigureName
+  colorSet,
+  LineYN = FALSE,
+  LegendYN = FALSE,
+  FigureName = "gmtplot"
 )
 }
 \arguments{
 \item{datain}{a dataframe or tibble}
 
-\item{GrpVar}{group by Column}
+\item{GrpVar}{group by numeric Column}
 
-\item{AvisintVar}{analysis visit numeric column}
+\item{GrpLabel}{a vector for group by column label}
+
+\item{AvisitnVar}{analysis visit numeric column}
+
+\item{AvisintVal}{analysis visit value}
+
+\item{AvisitLabel}{a vector for analysis visit label}
 
 \item{Aval}{analysis value numeric column}
 
@@ -29,9 +40,13 @@ gmtplot(
 
 \item{YLabel}{a character for Y axis label}
 
-\item{AvisitLabel}{a vector for analysis visit label}
-
 \item{LegendLabel}{a vector for Legend label}
+
+\item{colorSet}{a vector for color}
+
+\item{LineYN}{whether draw geom_line}
+
+\item{LegendYN}{whether draw legend}
 
 \item{FigureName}{a character for figure name}
 }

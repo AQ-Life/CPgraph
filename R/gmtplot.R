@@ -1,13 +1,18 @@
 #' draw GMT plot
 #'
 #' @param datain a dataframe or tibble
-#' @param GrpVar group by Column
-#' @param AvisintVar analysis visit numeric column
+#' @param GrpVar group by numeric Column
+#' @param GrpLabel a vector for group by column label
+#' @param AvisitnVar analysis visit numeric column
+#' @param AvisintVal analysis visit value
+#' @param AvisitLabel a vector for analysis visit label
 #' @param Aval analysis value numeric column
 #' @param Base baseline column
 #' @param YLabel a character for Y axis label
-#' @param AvisitLabel a vector for analysis visit label
 #' @param LegendLabel a vector for Legend label
+#' @param colorSet a vector for color
+#' @param LineYN whether draw geom_line
+#' @param LegendYN whether draw legend
 #' @param FigureName a character for figure name
 #'
 #' @return a figure as ggplot2 object
@@ -15,14 +20,37 @@
 #'
 #' @examples
 #' gmtplot(adis,"gmt_plot")
-gmtplot <- function(datain, GrpVar, AvisintVar, Aval, Base, YLabel, AvisitLabel, LegendLabel, FigureName){
+gmtplot <- function(datain,
+                    GrpVar = TRTAN,
+                    GrpLabel,
+                    AvisitnVar = AVISITN,
+                    AvisintVal,
+                    AvisitLabel,
+                    Aval = AVAL,
+                    Base = BASE,
+                    YLabel,
+                    LegendLabel,
+                    colorSet,
+                    LineYN = FALSE,
+                    LegendYN = FALSE,
+                    FigureName = "gmtplot"){
+
+  avisitdata <- tibble(Avisitn = AvisintVal) %>%
+    mutate(Avisitnum = row_number())
+
   adis1 <- datain %>%
     mutate(Grp = GrpVar,
-           Avisitn = AvisintVar,
-           Xp = case_when(Avisitn == 0 ~ Grp - 0.2,
-                          Avisitn %in% c(28, 42) ~ Grp + 0.2),
+           Avisitn = AvisitnVar,
            AVAL = Aval,
-           BASE = Base,
+           BASE = Base)
+
+  YaxisMax <- as.numeric(str_split_fixed(sprintf("%e", max(adis1$AVAL)), "\\+", n=2)[,2])+1
+
+  adis1 <- left_join(adis1, avisitdata, by = "Avisitn") %>%
+    mutate(
+           Xp = case_when(Avisitnum <= floor(length(AvisintVal)/2) ~ Grp - 0.2*(rev(Avisitnum)-ceiling(length(AvisintVal)/2)),
+                          Avisitnum > length(AvisintVal)/2 ~ Grp + 0.2*(Avisitnum-ceiling(length(AvisintVal)/2)),
+                          TRUE ~ Avisitnum),
            LOGAVAL = log10(AVAL),
            LOGFOLD = log10(AVAL/BASE)
     )
@@ -58,10 +86,13 @@ gmtplot <- function(datain, GrpVar, AvisintVar, Aval, Base, YLabel, AvisitLabel,
            foldmean = ifelse(Avisitn != 0,10**mean2, NA),
            nlabel = str_c("(N=",as.character(n),")"),
            foldlabel = str_c(as.character(round(foldmean,1)),"x"),
-           ymin = 10^5*1.5,
-           ymax = 10^5*2)
+           ymin = 10^YaxisMax*1.5,
+           ymax = 10^YaxisMax*2)
 
-  final <- plyr::rbind.fill(adis2, mean1)
+  GrpLabel <- tibble(Grp = c(unique(jitter$Grp)),
+                     GrpLabel = GrpLabel)
+
+  final <- plyr::rbind.fill(adis2, mean1, GrpLabel)
 
   windowsFonts(
     KT = windowsFont("楷体"),
@@ -70,22 +101,24 @@ gmtplot <- function(datain, GrpVar, AvisintVar, Aval, Base, YLabel, AvisitLabel,
     ArialUnicode = windowsFont("Arial Unicode MS")
   )
 
-  GMTPlotColor <- colorRampPalette(c("grey", "blue", "red", "green"))
+  GMTPlotColor <- colorRampPalette(colorSet)
 
-  ggplot(final) +
+  # browser()
+
+  p <- ggplot(final) +
     geom_col(aes(x = Xp, y = means, fill = factor(Grp)), alpha = 0.3, na.rm = TRUE)+
     geom_point(aes(x = XpDot, y = AVAL, color = factor(Grp)), na.rm = TRUE)+
-    geom_line(aes(x = XpDot, y = AVAL, group = USUBJID, color = factor(Grp)), na.rm = TRUE, alpha = 0.3)+
     geom_errorbar(aes(x = Xp, ymin = yerrl, ymax = yerru))+
-    geom_text(aes(x = Xp, y = 10^5, label = as.character(round(means))), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp, y = 10^YaxisMax, label = as.character(round(means))), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
     geom_text(aes(x = Xp, y = 0.25, label = nlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
-    geom_text(aes(x = Grp, y = 10^5*3, label = foldlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
+    geom_text(aes(x = Grp, y = 0.1, label = GrpLabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
+    geom_text(aes(x = Grp, y = 10^YaxisMax*3, label = foldlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
     geom_linerange(aes(x = Xp, ymin = ymin, ymax = ymax), na.rm = TRUE)+
-    geom_linerange(aes(xmin = Grp-0.2, xmax = Grp+0.2, y = 10^5*2))+
+    geom_linerange(aes(xmin = Grp-0.2, xmax = Grp+0.2, y = 10^YaxisMax*2))+
     geom_vline(xintercept = unique(jitter$Grp)[-which(unique(jitter$Grp) == max(unique(jitter$Grp)))]+0.5, linetype = "f8", alpha = 0.4)+
     theme_classic()+
     annotation_logticks(sides = "l")+
-    scale_y_log10(breaks = 10^(0:5),
+    scale_y_log10(breaks = 10^(0:YaxisMax),
                   label = c(expression(bold("10"^"0")), expression(bold("10"^"1")), expression(bold("10"^"2")), expression(bold("10"^"3")), expression(bold("10"^"4")), expression(bold("10"^"5"))),
                   expand = c(0, 0))+
     scale_x_continuous(breaks = distinct(jitter,Xp)$Xp,
@@ -95,24 +128,43 @@ gmtplot <- function(datain, GrpVar, AvisintVar, Aval, Base, YLabel, AvisitLabel,
                       guide = "none")+
     scale_color_manual(values = GMTPlotColor(length(unique(jitter$Grp))),
                        label = LegendLabel) +
-    theme(legend.title = element_blank(),
-          panel.grid = element_blank(),
-          text = element_text(family = "WRYH",
-                              face = "bold",
-                              color = "black",
-                              size = 12),
-          axis.text = element_text(family = "ArialUnicode",
-                                   face = "bold",
-                                   color = "black",
-                                   size = 12),
-          line = element_line(color = "black"),
-          plot.margin = unit(c(2,0,1,0.5),"lines")
-    )+
     coord_cartesian(ylim = c(1, 100000),
                     clip = "off")
 
-  p <- ggsave(paste0(FigureName,".png"), width = 7, height = 3.5)
-  return(p)
+  if (LineYN == TRUE){
+    p <- p + geom_line(aes(x = XpDot, y = AVAL, group = USUBJID, color = factor(Grp)), na.rm = TRUE, alpha = 0.7, linetype = 2)
+  }
+
+  if (LegendYN == FALSE){
+    p <- p + theme(legend.position = "none",
+                   panel.grid = element_blank(),
+                   text = element_text(family = "WRYH",
+                                       face = "bold",
+                                       color = "black",
+                                       size = 12),
+                   axis.text = element_text(family = "ArialUnicode",
+                                            face = "bold",
+                                            color = "black",
+                                            size = 12),
+                   line = element_line(color = "black"),
+                   plot.margin = unit(c(2,0,2,0.5),"lines"))
+  } else {
+    p <- p + theme(legend.title = element_blank(),
+                       panel.grid = element_blank(),
+                       text = element_text(family = "WRYH",
+                                           face = "bold",
+                                           color = "black",
+                                           size = 12),
+                       axis.text = element_text(family = "ArialUnicode",
+                                                face = "bold",
+                                                color = "black",
+                                                size = 12),
+                       line = element_line(color = "black"),
+                       plot.margin = unit(c(2,0,2,0.5),"lines"))
+  }
+
+  myplot <- ggsave(paste0(FigureName,".png"), width = 7, height = 3.5)
+  return(myplot)
 }
 
 
