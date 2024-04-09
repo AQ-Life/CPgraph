@@ -173,18 +173,18 @@ gmtplot <- function(datain,
                    line = element_line(color = "black"),
                    plot.margin = unit(marginunit,"lines"))
   } else {
-    # p <- p + theme(legend.title = element_blank(),
-    #                    panel.grid = element_blank(),
-    #                    text = element_text(family = "WRYH",
-    #                                        face = "bold",
-    #                                        color = "black",
-    #                                        size = 12),
-    #                    axis.text = element_text(family = "ArialUnicode",
-    #                                             face = "bold",
-    #                                             color = "black",
-    #                                             size = 12),
-    #                    line = element_line(color = "black"),
-    #                    plot.margin = margin(2,0,2,0.5, unit = "lines"))
+    p <- p + theme(legend.title = element_blank(),
+                   panel.grid = element_blank(),
+                   text = element_text(family = "WRYH",
+                                       face = "bold",
+                                       color = "black",
+                                       size = 12),
+                   axis.text = element_text(family = "ArialUnicode",
+                                            face = "bold",
+                                            color = "black",
+                                            size = 12),
+                   line = element_line(color = "black"),
+                   plot.margin = unit(marginunit,"lines"))
   }
 
 
@@ -193,6 +193,10 @@ gmtplot <- function(datain,
     LengthGrpAvisit <= 8 & LengthGrpAvisit > 4 ~ 7,
     LengthGrpAvisit <= 16 & LengthGrpAvisit > 12 ~ 10.5,
   )
+
+  if (LegendYN == TRUE){
+    fig_width <- fig_width + 0.5
+  }
 
   myplot <- ggsave(paste0(FigureName,".png"), width = fig_width, height = 3.5)
   return(myplot)
