@@ -115,9 +115,7 @@ gmtplot <- function(datain,
   final <- plyr::rbind.fill(adis2, mean1, GrpLabelData)
   # browser()
 
-  # library(showtext) #导入字体设置包
-  # library(sysfonts)
-  font_add(family = "KT", regular = "simkai.ttf")
+  sysfonts::font_add(family = "KT", regular = "simkai.ttf")
   showtext::showtext_auto()
   showtext::showtext_opts(dpi = 300)
 
