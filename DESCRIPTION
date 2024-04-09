@@ -1,7 +1,7 @@
 Package: gmtplot
 Type: Package
 Title: Generate Geometric Mean Titer Plot in Immunogenicity
-Version: 1.0
+Version: 1.1
 Author: Qi
 Maintainer: Qi <qi_luo2020@163.com>
 Description: More about what it does (maybe more than one line)

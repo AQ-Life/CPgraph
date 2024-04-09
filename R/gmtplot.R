@@ -36,7 +36,9 @@ gmtplot <- function(datain,
                     FigureName = "gmtplot"){
 
   avisitdata <- tibble(Avisitn = AvisintVal) %>%
-    mutate(Avisitnum = row_number())
+    mutate(Avisitnum = seq(1, by = 2, length.out = length(AvisintVal)),
+           AvisitRev = rev(Avisitnum),
+           lineheight = 1.9^seq(1, by = 1, length.out = length(AvisintVal)))
 
   adis1 <- datain %>%
     mutate(Grp = GrpVar,
@@ -45,11 +47,13 @@ gmtplot <- function(datain,
            BASE = Base)
 
   YaxisMax <- as.numeric(str_split_fixed(sprintf("%e", max(adis1$AVAL)), "\\+", n=2)[,2])+1
+  Xfactor <- case_when(length(AvisintVal) <= 3 ~ 0.2,
+                       length(AvisintVal) <= 5 ~ 0.12)
 
   adis1 <- left_join(adis1, avisitdata, by = "Avisitn") %>%
     mutate(
-           Xp = case_when(Avisitnum <= floor(length(AvisintVal)/2) ~ Grp - 0.2*(rev(Avisitnum)-ceiling(length(AvisintVal)/2)),
-                          Avisitnum > length(AvisintVal)/2 ~ Grp + 0.2*(Avisitnum-ceiling(length(AvisintVal)/2)),
+           Xp = case_when(Avisitnum <= floor(max(Avisitnum)/2) ~ Grp - Xfactor*(AvisitRev-ceiling(max(Avisitnum)/2)),
+                          Avisitnum > max(Avisitnum)/2 ~ Grp + Xfactor*(Avisitnum-ceiling(max(Avisitnum)/2)),
                           TRUE ~ Avisitnum),
            LOGAVAL = log10(AVAL),
            LOGFOLD = log10(AVAL/BASE)
@@ -58,6 +62,15 @@ gmtplot <- function(datain,
   jitter <- adis1 %>%
     count(Grp, Xp, AVAL)
 
+  LengthGrpAvisit <- length(GrpLabel)*length(AvisitLabel)
+
+  dot_j <- case_when(
+    length(GrpLabel) <= 2 & length(AvisitLabel) <= 2 ~ 0.005,
+    length(GrpLabel) <= 2 & length(AvisitLabel) <= 4 ~ 0.003,
+    length(GrpLabel) <= 4 & length(AvisitLabel) <= 2 ~ 0.01,
+    length(GrpLabel) <= 4 & length(AvisitLabel) <= 4 ~ 0.005,
+                     )
+
   adis2 <- left_join(adis1, jitter, by = c("Grp", "Xp", "AVAL")) %>%
     arrange(Grp, Xp, AVAL) %>%
     group_by(Grp, Xp, AVAL) %>%
@@ -65,12 +78,12 @@ gmtplot <- function(datain,
            jitterDot = case_when(jittern < ceiling(n/2) ~ jittern*(-1),
                                  jittern > ceiling(n/2) ~ jittern-ceiling(n/2),
                                  TRUE ~ 0),
-           XpDot = case_when(n <= 8 ~ Xp+jitterDot*0.04,
-                             n <= 16 ~ Xp+jitterDot*0.02,
-                             TRUE ~ Xp+jitterDot*0.01))
+           XpDot = case_when(n <= 8 ~ Xp+jitterDot*dot_j*4,
+                             n <= 16 ~ Xp+jitterDot*dot_j*2,
+                             TRUE ~ Xp+jitterDot*dot_j))
 
   mean1 <- adis2 %>%
-    group_by(Grp, Xp, Avisitn) %>%
+    group_by(Grp, Xp, Avisitn, Avisitnum, lineheight) %>%
     select(Grp, Xp, Avisitn, LOGAVAL, LOGFOLD) %>%
     dplyr::summarise(n = n(),
                      mean1 = mean(LOGAVAL),
@@ -86,14 +99,20 @@ gmtplot <- function(datain,
            foldmean = ifelse(Avisitn != 0,10**mean2, NA),
            nlabel = str_c("(N=",as.character(n),")"),
            foldlabel = str_c(as.character(round(foldmean,1)),"x"),
-           ymin = 10^YaxisMax*1.5,
-           ymax = 10^YaxisMax*2)
+           ymin = 10^YaxisMax*1.5
+           ) %>%
+    ungroup() %>%
+    group_by(Grp) %>%
+    mutate(xmin = if_else(Avisitnum == 1, NA, min(Xp)),
+           xmax = if_else(Avisitnum != 1, Xp, NA),
+           ymax = if_else(Avisitnum == 1, 10^YaxisMax*(max(lineheight)/1.4), 10^YaxisMax*(lineheight/1.4))) %>%
+    ungroup()
 
-  GrpLabel <- tibble(Grp = c(unique(jitter$Grp)),
+  GrpLabelData <- tibble(Grp = c(unique(jitter$Grp)),
                      GrpLabel = GrpLabel)
 
-  final <- plyr::rbind.fill(adis2, mean1, GrpLabel)
-
+  final <- plyr::rbind.fill(adis2, mean1, GrpLabelData)
+  # browser()
   windowsFonts(
     KT = windowsFont("楷体"),
     Arial = windowsFont("Arial"),
@@ -103,22 +122,22 @@ gmtplot <- function(datain,
 
   GMTPlotColor <- colorRampPalette(colorSet)
 
-  # browser()
+
 
   p <- ggplot(final) +
     geom_col(aes(x = Xp, y = means, fill = factor(Grp)), alpha = 0.3, na.rm = TRUE)+
-    geom_point(aes(x = XpDot, y = AVAL, color = factor(Grp)), na.rm = TRUE)+
+    geom_point(aes(x = XpDot, y = AVAL, color = factor(Grp)), na.rm = TRUE, size = 0.5)+
     geom_errorbar(aes(x = Xp, ymin = yerrl, ymax = yerru))+
     geom_text(aes(x = Xp, y = 10^YaxisMax, label = as.character(round(means))), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
     geom_text(aes(x = Xp, y = 0.25, label = nlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
     geom_text(aes(x = Grp, y = 0.1, label = GrpLabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
-    geom_text(aes(x = Grp, y = 10^YaxisMax*3, label = foldlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp-Xfactor, y = 10^YaxisMax*(lineheight), label = foldlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
     geom_linerange(aes(x = Xp, ymin = ymin, ymax = ymax), na.rm = TRUE)+
-    geom_linerange(aes(xmin = Grp-0.2, xmax = Grp+0.2, y = 10^YaxisMax*2))+
+    geom_linerange(aes(xmin = xmin, xmax = xmax, y = 10^YaxisMax*(lineheight/1.4)))+
     geom_vline(xintercept = unique(jitter$Grp)[-which(unique(jitter$Grp) == max(unique(jitter$Grp)))]+0.5, linetype = "f8", alpha = 0.4)+
     theme_classic()+
     annotation_logticks(sides = "l")+
-    scale_y_log10(breaks = 10^(0:YaxisMax),
+    scale_y_log10(breaks = 10^(0:5),
                   label = c(expression(bold("10"^"0")), expression(bold("10"^"1")), expression(bold("10"^"2")), expression(bold("10"^"3")), expression(bold("10"^"4")), expression(bold("10"^"5"))),
                   expand = c(0, 0))+
     scale_x_continuous(breaks = distinct(jitter,Xp)$Xp,
@@ -128,12 +147,17 @@ gmtplot <- function(datain,
                       guide = "none")+
     scale_color_manual(values = GMTPlotColor(length(unique(jitter$Grp))),
                        label = LegendLabel) +
-    coord_cartesian(ylim = c(1, 100000),
+    coord_cartesian(ylim = c(1, 10^YaxisMax),
                     clip = "off")
 
   if (LineYN == TRUE){
     p <- p + geom_line(aes(x = XpDot, y = AVAL, group = USUBJID, color = factor(Grp)), na.rm = TRUE, alpha = 0.7, linetype = 2)
   }
+
+  marginunit <- case_when(
+    length(AvisitLabel) <= 2 ~ c(2,0,2,0.5),
+    length(AvisitLabel) <= 4 ~ c(3.5,0,1.7,0.5),
+  )
 
   if (LegendYN == FALSE){
     p <- p + theme(legend.position = "none",
@@ -147,23 +171,30 @@ gmtplot <- function(datain,
                                             color = "black",
                                             size = 12),
                    line = element_line(color = "black"),
-                   plot.margin = unit(c(2,0,2,0.5),"lines"))
+                   plot.margin = unit(marginunit,"lines"))
   } else {
-    p <- p + theme(legend.title = element_blank(),
-                       panel.grid = element_blank(),
-                       text = element_text(family = "WRYH",
-                                           face = "bold",
-                                           color = "black",
-                                           size = 12),
-                       axis.text = element_text(family = "ArialUnicode",
-                                                face = "bold",
-                                                color = "black",
-                                                size = 12),
-                       line = element_line(color = "black"),
-                       plot.margin = unit(c(2,0,2,0.5),"lines"))
+    # p <- p + theme(legend.title = element_blank(),
+    #                    panel.grid = element_blank(),
+    #                    text = element_text(family = "WRYH",
+    #                                        face = "bold",
+    #                                        color = "black",
+    #                                        size = 12),
+    #                    axis.text = element_text(family = "ArialUnicode",
+    #                                             face = "bold",
+    #                                             color = "black",
+    #                                             size = 12),
+    #                    line = element_line(color = "black"),
+    #                    plot.margin = margin(2,0,2,0.5, unit = "lines"))
   }
 
-  myplot <- ggsave(paste0(FigureName,".png"), width = 7, height = 3.5)
+
+  fig_width <- case_when(
+    LengthGrpAvisit <= 4 ~ 4,
+    LengthGrpAvisit <= 8 & LengthGrpAvisit > 4 ~ 7,
+    LengthGrpAvisit <= 16 & LengthGrpAvisit > 12 ~ 10.5,
+  )
+
+  myplot <- ggsave(paste0(FigureName,".png"), width = fig_width, height = 3.5)
   return(myplot)
 }
 
