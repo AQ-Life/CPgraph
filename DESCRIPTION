@@ -15,4 +15,5 @@ Depends:
     tidyverse (>= 2.0.0)
 Imports: 
     plyr,
-    scales
+    scales,
+    showtext

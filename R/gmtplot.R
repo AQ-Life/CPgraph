@@ -114,32 +114,39 @@ gmtplot <- function(datain,
 
   final <- plyr::rbind.fill(adis2, mean1, GrpLabelData)
   # browser()
-  windowsFonts(
-    KT = windowsFont("楷体"),
-    Arial = windowsFont("Arial"),
-    WRYH = windowsFont("微软雅黑"),
-    ArialUnicode = windowsFont("Arial Unicode MS")
-  )
+
+  # library(showtext) #导入字体设置包
+  # library(sysfonts)
+  font_add(family = "KT", regular = "simkai.ttf")
+  showtext::showtext_auto()
+  showtext::showtext_opts(dpi = 300)
+
 
   GMTPlotColor <- colorRampPalette(colorSet)
-
 
 
   p <- ggplot(final) +
     geom_col(aes(x = Xp, y = means, fill = factor(Grp)), alpha = 0.3, na.rm = TRUE)+
     geom_point(aes(x = XpDot, y = AVAL, color = factor(Grp)), na.rm = TRUE, size = 0.5)+
     geom_errorbar(aes(x = Xp, ymin = yerrl, ymax = yerru))+
-    geom_text(aes(x = Xp, y = 10^YaxisMax, label = as.character(round(means))), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
-    geom_text(aes(x = Xp, y = 0.25, label = nlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
-    geom_text(aes(x = Grp, y = 0.1, label = GrpLabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
-    geom_text(aes(x = Xp-Xfactor, y = 10^YaxisMax*(lineheight), label = foldlabel), na.rm = TRUE, family = "WRYH", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp, y = 10^YaxisMax, label = as.character(round(means))), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp, y = 0.25, label = nlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
+    geom_text(aes(x = Grp, y = 0.1, label = GrpLabel), na.rm = TRUE, family = "KT", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp-Xfactor, y = 10^YaxisMax*(lineheight), label = foldlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
     geom_linerange(aes(x = Xp, ymin = ymin, ymax = ymax), na.rm = TRUE)+
     geom_linerange(aes(xmin = xmin, xmax = xmax, y = 10^YaxisMax*(lineheight/1.4)))+
     geom_vline(xintercept = unique(jitter$Grp)[-which(unique(jitter$Grp) == max(unique(jitter$Grp)))]+0.5, linetype = "f8", alpha = 0.4)+
     theme_classic()+
     annotation_logticks(sides = "l")+
-    scale_y_log10(breaks = 10^(0:5),
-                  label = c(expression(bold("10"^"0")), expression(bold("10"^"1")), expression(bold("10"^"2")), expression(bold("10"^"3")), expression(bold("10"^"4")), expression(bold("10"^"5"))),
+    scale_y_log10(breaks = 10^(0:7),
+                  label = c(expression(bold("10"^"0")),
+                            expression(bold("10"^"1")),
+                            expression(bold("10"^"2")),
+                            expression(bold("10"^"3")),
+                            expression(bold("10"^"4")),
+                            expression(bold("10"^"5")),
+                            expression(bold("10"^"6")),
+                            expression(bold("10"^"7"))),
                   expand = c(0, 0))+
     scale_x_continuous(breaks = distinct(jitter,Xp)$Xp,
                        labels = rep(AvisitLabel,length(unique(jitter$Grp))))+
@@ -163,11 +170,11 @@ gmtplot <- function(datain,
   if (LegendYN == FALSE){
     p <- p + theme(legend.position = "none",
                    panel.grid = element_blank(),
-                   text = element_text(family = "WRYH",
+                   text = element_text(family = "sans",
                                        face = "bold",
                                        color = "black",
                                        size = 12),
-                   axis.text = element_text(family = "ArialUnicode",
+                   axis.text = element_text(family = "sans",
                                             face = "bold",
                                             color = "black",
                                             size = 12),
@@ -176,11 +183,11 @@ gmtplot <- function(datain,
   } else {
     p <- p + theme(legend.title = element_blank(),
                    panel.grid = element_blank(),
-                   text = element_text(family = "WRYH",
+                   text = element_text(family = "sans",
                                        face = "bold",
                                        color = "black",
                                        size = 12),
-                   axis.text = element_text(family = "ArialUnicode",
+                   axis.text = element_text(family = "sans",
                                             face = "bold",
                                             color = "black",
                                             size = 12),
@@ -199,7 +206,12 @@ gmtplot <- function(datain,
     fig_width <- fig_width + 0.5
   }
 
-  myplot <- ggsave(paste0(FigureName,".png"), width = fig_width, height = 3.5)
+  fig_height <- case_when(
+    YaxisMax <= 5 ~ 3.5,
+    YaxisMax <= 7 ~ 4.2
+  )
+
+  myplot <- ggsave(paste0(FigureName,".png"), width = fig_width, height = fig_height)
   return(myplot)
 }
 
