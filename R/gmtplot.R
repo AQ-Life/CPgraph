@@ -129,7 +129,7 @@ gmtplot <- function(datain,
     geom_errorbar(aes(x = Xp, ymin = yerrl, ymax = yerru))+
     geom_text(aes(x = Xp, y = 10^YaxisMax, label = as.character(round(means))), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
     geom_text(aes(x = Xp, y = 0.25, label = nlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
-    geom_text(aes(x = Grp, y = 0.1, label = GrpLabel), na.rm = TRUE, family = "KT", fontface = "bold", size = 4)+
+    geom_text(aes(x = Grp, y = 0.1, label = GrpLabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
     geom_text(aes(x = Xp-Xfactor, y = 10^YaxisMax*(lineheight), label = foldlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
     geom_linerange(aes(x = Xp, ymin = ymin, ymax = ymax), na.rm = TRUE)+
     geom_linerange(aes(xmin = xmin, xmax = xmax, y = 10^YaxisMax*(lineheight/1.4)))+
