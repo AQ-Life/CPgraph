@@ -47,8 +47,9 @@ gmtplot <- function(datain,
            BASE = Base)
 
   YaxisMax <- as.numeric(str_split_fixed(sprintf("%e", max(adis1$AVAL)), "\\+", n=2)[,2])+1
-  Xfactor <- case_when(length(AvisintVal) <= 3 ~ 0.2,
-                       length(AvisintVal) <= 5 ~ 0.12)
+  Xfactor <- case_when(length(AvisintVal) <= 2 ~ 0.2,
+                       length(AvisintVal) <= 4 ~ 0.12,
+                       length(AvisintVal) <= 6 ~ 0.06)
 
   adis1 <- left_join(adis1, avisitdata, by = "Avisitn") %>%
     mutate(
