@@ -2,3 +2,4 @@
 
 export(gmtdata)
 export(gmtplot)
+export(gmtplot_line)

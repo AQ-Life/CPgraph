@@ -20,25 +20,20 @@
 #'
 #' @examples
 #' gmtplot(adis,"gmt_plot")
-gmtplot <- function(datain,
-                    GrpVar = TRTAN,
-                    GrpLabel,
-                    AvisitnVar = AVISITN,
-                    AvisintVal,
-                    AvisitLabel,
-                    Aval = AVAL,
-                    Base = BASE,
-                    YLabel,
-                    LegendLabel,
-                    colorSet,
-                    LineYN = FALSE,
-                    LegendYN = FALSE,
-                    FigureName = "gmtplot"){
-
-  avisitdata <- tibble(Avisitn = AvisintVal) %>%
-    mutate(Avisitnum = seq(1, by = 2, length.out = length(AvisintVal)),
-           AvisitRev = rev(Avisitnum),
-           lineheight = 1.9^seq(1, by = 1, length.out = length(AvisintVal)))
+gmtplot_line <- function(datain,
+                         GrpVar = TRTAN,
+                         GrpLabel,
+                         AvisitnVar = AVISITN,
+                         AvisintVal,
+                         AvisitLabel,
+                         Aval = AVAL,
+                         Base = BASE,
+                         YLabel,
+                         LegendLabel,
+                         colorSet,
+                         LineYN = FALSE,
+                         LegendYN = FALSE,
+                         FigureName = "gmtplot"){
 
   adis1 <- datain %>%
     mutate(Grp = GrpVar,
@@ -46,18 +41,31 @@ gmtplot <- function(datain,
            AVAL = Aval,
            BASE = Base)
 
-  YaxisMax <- as.numeric(str_split_fixed(sprintf("%e", max(adis1$AVAL)), "\\+", n=2)[,2])+1
+  YaxisMax <- if_else(max(adis1$AVAL)%%10 == 0, ceiling(max(adis1$AVAL)/10)*10+10,ceiling(max(adis1$AVAL)/10)*10)
+
+  YaxisByBreak <- case_when(YaxisMax <= 100 ~ 10,
+                            YaxisMax <= 200 ~ 20,
+                            YaxisMax <= 300 ~ 30,
+                            YaxisMax <= 400 ~ 40,
+                            YaxisMax <= 500 ~ 50,
+                            YaxisMax <= 600 ~ 60,
+                            YaxisMax <= 700 ~ 70)
+
   Xfactor <- case_when(length(AvisintVal) <= 2 ~ 0.2,
                        length(AvisintVal) <= 4 ~ 0.12,
                        length(AvisintVal) <= 6 ~ 0.06)
 
+  avisitdata <- tibble(Avisitn = AvisintVal) %>%
+    mutate(Avisitnum = seq(1, by = 2, length.out = length(AvisintVal)),
+           AvisitRev = rev(Avisitnum),
+           lineheight = seq(1, by = 0.6*YaxisByBreak, length.out = length(AvisintVal)))
+
   adis1 <- left_join(adis1, avisitdata, by = "Avisitn") %>%
     mutate(
-           Xp = case_when(Avisitnum <= floor(max(Avisitnum)/2) ~ Grp - Xfactor*(AvisitRev-ceiling(max(Avisitnum)/2)),
-                          Avisitnum > max(Avisitnum)/2 ~ Grp + Xfactor*(Avisitnum-ceiling(max(Avisitnum)/2)),
-                          TRUE ~ Avisitnum),
-           LOGAVAL = log10(AVAL),
-           LOGFOLD = log10(AVAL/BASE)
+      Xp = case_when(Avisitnum <= floor(max(Avisitnum)/2) ~ Grp - Xfactor*(AvisitRev-ceiling(max(Avisitnum)/2)),
+                     Avisitnum > max(Avisitnum)/2 ~ Grp + Xfactor*(Avisitnum-ceiling(max(Avisitnum)/2)),
+                     TRUE ~ Avisitnum),
+      FOLD = AVAL/BASE
     )
 
   jitter <- adis1 %>%
@@ -70,7 +78,7 @@ gmtplot <- function(datain,
     length(GrpLabel) <= 2 & length(AvisitLabel) <= 4 ~ 0.003,
     length(GrpLabel) <= 4 & length(AvisitLabel) <= 2 ~ 0.01,
     length(GrpLabel) <= 4 & length(AvisitLabel) <= 4 ~ 0.005,
-                     )
+  )
 
   adis2 <- left_join(adis1, jitter, by = c("Grp", "Xp", "AVAL")) %>%
     arrange(Grp, Xp, AVAL) %>%
@@ -85,35 +93,34 @@ gmtplot <- function(datain,
 
   mean1 <- adis2 %>%
     group_by(Grp, Xp, Avisitn, Avisitnum, lineheight) %>%
-    select(Grp, Xp, Avisitn, LOGAVAL, LOGFOLD) %>%
+    select(Grp, Xp, Avisitn, AVAL, FOLD) %>%
     dplyr::summarise(n = n(),
-                     mean1 = mean(LOGAVAL),
-                     mean2 = mean(LOGFOLD),
-                     sd1 = sd(LOGAVAL),
-                     sd2 = sd(LOGFOLD)) %>%
+                     mean1 = mean(AVAL),
+                     mean2 = mean(FOLD),
+                     sd1 = sd(AVAL),
+                     sd2 = sd(FOLD)) %>%
     mutate(se = sd1/sqrt(n),
            lclm = mean1 - 1.96 * se,
            uclm = mean1 + 1.96 * se,
-           yerrl = 10**lclm,
-           yerru = 10**uclm,
-           means = 10**mean1,
-           foldmean = ifelse(Avisitn != 0,10**mean2, NA),
+           yerrl = lclm,
+           yerru = uclm,
+           means = mean1,
+           foldmean = ifelse(Avisitn != 0, mean2, NA),
            nlabel = str_c("(N=",as.character(n),")"),
            foldlabel = str_c(as.character(round(foldmean,1)),"x"),
-           ymin = 10^YaxisMax*1.5
-           ) %>%
+           ymin = YaxisMax+YaxisByBreak*0.4
+    ) %>%
     ungroup() %>%
     group_by(Grp) %>%
     mutate(xmin = if_else(Avisitnum == 1, NA, min(Xp)),
            xmax = if_else(Avisitnum != 1, Xp, NA),
-           ymax = if_else(Avisitnum == 1, 10^YaxisMax*(max(lineheight)/1.4), 10^YaxisMax*(lineheight/1.4))) %>%
+           ymax = if_else(Avisitnum == 1, YaxisMax+(max(lineheight-YaxisByBreak*0.4)), YaxisMax+(lineheight-YaxisByBreak*0.4))) %>%
     ungroup()
 
   GrpLabelData <- tibble(Grp = c(unique(jitter$Grp)),
-                     GrpLabel = GrpLabel)
+                         GrpLabel = GrpLabel)
 
   final <- plyr::rbind.fill(adis2, mean1, GrpLabelData)
-  # browser()
 
   sysfonts::font_add(family = "KT", regular = "simkai.ttf")
   showtext::showtext_auto()
@@ -123,29 +130,34 @@ gmtplot <- function(datain,
   GMTPlotColor <- colorRampPalette(colorSet)
 
 
+
+  # browser()
+
   p <- ggplot(final) +
     geom_col(aes(x = Xp, y = means, fill = factor(Grp)), alpha = 0.3, na.rm = TRUE)+
     geom_point(aes(x = XpDot, y = AVAL, color = factor(Grp)), na.rm = TRUE, size = 0.5)+
     geom_errorbar(aes(x = Xp, ymin = yerrl, ymax = yerru))+
-    geom_text(aes(x = Xp, y = 10^YaxisMax, label = as.character(round(means))), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
-    geom_text(aes(x = Xp, y = 0.25, label = nlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
-    geom_text(aes(x = Grp, y = 0.1, label = GrpLabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
-    geom_text(aes(x = Xp-Xfactor, y = 10^YaxisMax*(lineheight), label = foldlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp, y = YaxisMax, label = as.character(round(means))), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp, y = -YaxisByBreak*0.85, label = nlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
+    geom_text(aes(x = Grp, y = -YaxisByBreak*1.35, label = GrpLabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
+    geom_text(aes(x = Xp-Xfactor, y = YaxisMax+(lineheight), label = foldlabel), na.rm = TRUE, family = "sans", fontface = "bold", size = 4)+
     geom_linerange(aes(x = Xp, ymin = ymin, ymax = ymax), na.rm = TRUE)+
-    geom_linerange(aes(xmin = xmin, xmax = xmax, y = 10^YaxisMax*(lineheight/1.4)))+
+    geom_linerange(aes(xmin = xmin, xmax = xmax, y = YaxisMax+(lineheight-YaxisByBreak*0.22)))+
     geom_vline(xintercept = unique(jitter$Grp)[-which(unique(jitter$Grp) == max(unique(jitter$Grp)))]+0.5, linetype = "f8", alpha = 0.4)+
     theme_classic()+
-    annotation_logticks(sides = "l")+
-    scale_y_log10(breaks = 10^(0:7),
-                  label = c(expression(bold("10"^"0")),
-                            expression(bold("10"^"1")),
-                            expression(bold("10"^"2")),
-                            expression(bold("10"^"3")),
-                            expression(bold("10"^"4")),
-                            expression(bold("10"^"5")),
-                            expression(bold("10"^"6")),
-                            expression(bold("10"^"7"))),
-                  expand = c(0, 0))+
+    # annotation_logticks(sides = "l")+
+    # scale_y_log10(breaks = 10^(0:7),
+    #               label = c(expression(bold("10"^"0")),
+    #                         expression(bold("10"^"1")),
+    #                         expression(bold("10"^"2")),
+    #                         expression(bold("10"^"3")),
+    #                         expression(bold("10"^"4")),
+    #                         expression(bold("10"^"5")),
+    #                         expression(bold("10"^"6")),
+    #                         expression(bold("10"^"7"))),
+    #               expand = c(0, 0))+
+  scale_y_continuous(breaks = seq(0,YaxisMax,by = YaxisByBreak),
+                     expand = c(0,0))+
     scale_x_continuous(breaks = distinct(jitter,Xp)$Xp,
                        labels = rep(AvisitLabel,length(unique(jitter$Grp))))+
     labs(y = YLabel, x = NULL)+
@@ -153,7 +165,7 @@ gmtplot <- function(datain,
                       guide = "none")+
     scale_color_manual(values = GMTPlotColor(length(unique(jitter$Grp))),
                        label = LegendLabel) +
-    coord_cartesian(ylim = c(1, 10^YaxisMax),
+    coord_cartesian(ylim = c(0, YaxisMax),
                     clip = "off")
 
   if (LineYN == TRUE){
@@ -206,14 +218,14 @@ gmtplot <- function(datain,
     fig_width <- fig_width + 0.5
   }
 
-  fig_height <- case_when(
-    YaxisMax <= 5 ~ 3.5,
-    YaxisMax <= 7 ~ 4.2
-  )
+  # fig_height <- case_when(
+  #   YaxisMax <= 200 ~ 4,
+  #   YaxisMax <= 400 ~ 7,
+  #   YaxisMax <= 600 ~ 7
+  # )
 
-  myplot <- ggsave(paste0(FigureName,".png"), width = fig_width, height = fig_height)
+  print(fig_width)
+  # print(fig_height)
+  myplot <- ggsave(paste0(FigureName,".png"), width = fig_width, height = 4)
   return(myplot)
 }
-
-
-
