@@ -30,6 +30,8 @@ devtools::install_github("AQ-Life/gmtplot")
 
 ## Arguments
 
+### gmtplot
+
 | Function Name | Arguments   | Fucntion (Requirement)                                  | Default |
 |---------------|-------------|---------------------------------------------------------|---------|
 | gmtplot       | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |         |
@@ -46,7 +48,11 @@ devtools::install_github("AQ-Life/gmtplot")
 | gmtplot       | LineYN      | 是否绘制折线图                                          | FALSE   |
 | gmtplot       | LegendYN    | 是否显示图例                                            | FALSE   |
 | gmtplot       | FigureName  | 输出图片名称                                            | gmtplot |
-|               |             |                                                         |         |
+
+### gmtplot_line
+
+| Function Name | Arguments   | Fucntion (Requirement)                                  | Default |
+|---------------|-------------|---------------------------------------------------------|---------|
 | gmtplot_line  | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |         |
 | gmtplot_line  | GrpVar      | 分组变量                                                | TRTAN   |
 | gmtplot_line  | GrpLabel    | 分组变量展示的标签                                      |         |
@@ -110,6 +116,16 @@ gmtplot(datain = adis,
 #> Warning: Removed 504 rows containing missing values (`geom_segment()`).
 #> [1] "gmt_plot.png"
 ```
+
+## Presentation
+
+### gmtplot
+
+![](images/IGGGE.png)
+
+### gmtplot_line
+
+![](images/IL4GHGL.png)
 
 ## Additional Requirements
 
