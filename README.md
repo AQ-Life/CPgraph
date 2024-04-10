@@ -6,11 +6,17 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of gmtplot is to draw GMT (Geometric Mean Titer) plot in
+The goal of this package is to draw general clinical trials graphs.
+
+“gmtplot” function is to draw GMT (Geometric Mean Titer) plot in
 immunogenicity in vaccine clinical trials. Please refer to [Generation
 of Geometric Mean Titer Plot in Immunogenicity from SAS and
 R](https://www.lexjansen.com/pharmasug-cn/2023/CC/Pharmasug-China-2023-CC115.pdf)
 from PharmaSUG.
+
+“gmtplot_line” function is similar to “gmtplot” function. But if the
+analysis value is linear, “gmtplot_line” will be used; if the analysis
+value is exponential, “gmtplot” function will be used.
 
 ## Installation
 
@@ -21,6 +27,40 @@ You can install the development version of gmtplot from
 # install.packages("devtools")
 devtools::install_github("AQ-Life/gmtplot")
 ```
+
+## Arguments
+
+| Function Name | Arguments   | Fucntion (Requirement)                                  | Default |
+|---------------|-------------|---------------------------------------------------------|---------|
+| gmtplot       | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |         |
+| gmtplot       | GrpVar      | 分组变量                                                | TRTAN   |
+| gmtplot       | GrpLabel    | 分组变量展示的标签                                      |         |
+| gmtplot       | AvisitnVar  | 分析访视变量（子分组变量）                              | AVISITN |
+| gmtplot       | AvisintVal  | 需要纳入的分析访视数值型结果                            |         |
+| gmtplot       | AvisitLabel | 需要纳入的分析访视的标签                                |         |
+| gmtplot       | Aval        | 分析值（数值型）                                        | AVAL    |
+| gmtplot       | Base        | 基线值（数值型）                                        | BASE    |
+| gmtplot       | YLabel      | Y轴标签                                                 |         |
+| gmtplot       | LegendLabel | 分组变量的图例标签                                      |         |
+| gmtplot       | colorSet    | 颜色设置（根据分组数量设置多个颜色）                    |         |
+| gmtplot       | LineYN      | 是否绘制折线图                                          | FALSE   |
+| gmtplot       | LegendYN    | 是否显示图例                                            | FALSE   |
+| gmtplot       | FigureName  | 输出图片名称                                            | gmtplot |
+|               |             |                                                         |         |
+| gmtplot_line  | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |         |
+| gmtplot_line  | GrpVar      | 分组变量                                                | TRTAN   |
+| gmtplot_line  | GrpLabel    | 分组变量展示的标签                                      |         |
+| gmtplot_line  | AvisitnVar  | 分析访视变量（子分组变量）                              | AVISITN |
+| gmtplot_line  | AvisintVal  | 需要纳入的分析访视数值型结果                            |         |
+| gmtplot_line  | AvisitLabel | 需要纳入的分析访视的标签                                |         |
+| gmtplot_line  | Aval        | 分析值（数值型）                                        | AVAL    |
+| gmtplot_line  | Base        | 基线值（数值型）                                        | BASE    |
+| gmtplot_line  | YLabel      | Y轴标签                                                 |         |
+| gmtplot_line  | LegendLabel | 分组变量的图例标签                                      |         |
+| gmtplot_line  | colorSet    | 颜色设置（根据分组数量设置多个颜色）                    |         |
+| gmtplot_line  | LineYN      | 是否绘制折线图                                          | FALSE   |
+| gmtplot_line  | LegendYN    | 是否显示图例                                            | FALSE   |
+| gmtplot_line  | FigureName  | 输出图片名称                                            | gmtplot |
 
 ## Example
 
@@ -44,25 +84,30 @@ library(haven)
 adis <- read_sas("adis.sas7bdat")
 
 adis <- adis %>% 
-  dplyr::filter(IPPSFL == "Y", PARAMCD == "SAR2NAB", ANL01FL == "Y") %>% 
-  mutate(Gvar = if_else(COHORT == "Cohort 2",TRTAN+2, TRTAN),
-         AVISITN = if_else(AVISITN == 42, 28, AVISITN))
+  dplyr::filter(IFASFL == "Y", PARAMCD == "SAR2NAB", ANL01FL == "Y", AVISITN %in% c(0,28,42)) %>% 
+  mutate(Gvar = if_else(COHORT == "Cohort 2", TRTAN+2, TRTAN),
+         AVISITN = if_else(AVISITN == 42, 28, AVISITN),
+         AVISITN = if_else(AVISITN == 150, 120, AVISITN),
+         AVISITN = if_else(AVISITN == 178, 148, AVISITN)) %>% 
+  filter(Gvar %in% c(1,2,3))
 
 gmtplot(datain = adis,
         GrpVar = adis$Gvar,
-        GrpLabel = c("Group A", "Group B", "Group C", "Group D"),
+        GrpLabel = c("a", "Group B", "C"),
         AvisitnVar = adis$AVISITN,
         AvisintVal = c(0, 28),
         AvisitLabel = c("D0", "D28"),
         Aval = adis$AVAL,
         Base = adis$BASE,
-        YLabel = "PRNT50",
-        LegendLabel = c(),
-        colorSet = c("grey", "blue", "grey", "blue"),
-        # LineYN = TRUE,
-        # LegendYN = TRUE,
+        YLabel = "PRNT50LLL",
+        LegendLabel = c("V01E","V01E-2"),
+        colorSet = c("grey", "blue", "red"),
+        LineYN = FALSE,
+        LegendYN = FALSE,
         FigureName = "gmt_plot")
-#> Warning: Removed 686 rows containing missing values (`position_stack()`).
+#> Adding missing grouping variables: `Avisitnum`, `lineheight`
+#> Warning: Removed 501 rows containing missing values (`position_stack()`).
+#> Warning: Removed 504 rows containing missing values (`geom_segment()`).
 #> [1] "gmt_plot.png"
 ```
 
