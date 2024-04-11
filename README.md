@@ -86,14 +86,14 @@ devtools::install_github("AQ-Life/gmtplot")
 | aetoxgrplot   | colorSet   | 颜色设置（根据严重程度等级数量设置多个颜色） | c(“red”, “blue”, “grey”) |
 | aetoxgrplot   | FigureName | 输出图片名称                                 | “aetoxgrplot”            |
 
-## Example
+## Usage
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to solve a common problem.
 
 ### gmtplot
 
 ``` r
-{r example}
+# {r example}
 library(gmtplot)
 library(haven)
 
@@ -123,13 +123,37 @@ gmtplot(datain = adis,
         FigureName = "gmt_plot")
 ```
 
+![](images/IGGGE.png)
+
+### gmtplot_line
+
+``` r
+# {r example}
+gmtplot_line(datain = adis2,
+        GrpVar = adis2$GVAR,
+        GrpLabel = c("<40 yrs", "40-49 yrs", ">=50 yrs"),
+        AvisitnVar = adis2$AVISITN,
+        AvisintVal = c(0, 30),
+        AvisitLabel = c("D0", "D30"),
+        Aval = adis2$AVAL,
+        Base = adis2$BASE,
+        YLabel = "PRNT50 Titer",
+        LegendLabel = c(),
+        colorSet = c("grey", "blue", "red"),
+        LineYN = FALSE,
+        LegendYN = FALSE,
+        FigureName = x)
+```
+
+![](images/IL4GHGL.png)
+
 ### aetoxgrplot
 
 ``` r
-{r example}
+# {r example}
 adsl <- read_sas("adsl.sas7bdat") %>%
   filter(SAFFL == "是") %>%
-  mutate(TRT01AN = if_else(AGE>=60, TRT01AN+2, TRT01AN))
+  mutate(TRT01AN = if_else(AGE>=60,TRT01AN+2, TRT01AN))
 
 adae <- read_sas("adae.sas7bdat") %>%
   filter(SAFFL == "是", AECAT == "征集性不良事件", AESCAT == "征集性全身不良事件", COHORTN == 1) %>% 
@@ -147,19 +171,7 @@ aetoxgrplot(dataADSL = adsl,
             FigureName = "aetox")
 ```
 
-## Presentation
-
-### gmtplot
-
-![](images/IGGGE.png)
-
-### gmtplot_line
-
-![](images/IL4GHGL.png)
-
-### aetoxgrplot
-
-![](aetox.png)
+![](images/aetox.png)
 
 ## Additional Requirements
 
