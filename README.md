@@ -32,59 +32,66 @@ devtools::install_github("AQ-Life/gmtplot")
 
 ### gmtplot
 
-| Function Name | Arguments   | Fucntion (Requirement)                                  | Default |
-|---------------|-------------|---------------------------------------------------------|---------|
-| gmtplot       | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |         |
-| gmtplot       | GrpVar      | 分组变量                                                | TRTAN   |
-| gmtplot       | GrpLabel    | 分组变量展示的标签                                      |         |
-| gmtplot       | AvisitnVar  | 分析访视变量（子分组变量）                              | AVISITN |
-| gmtplot       | AvisintVal  | 需要纳入的分析访视数值型结果                            |         |
-| gmtplot       | AvisitLabel | 需要纳入的分析访视的标签                                |         |
-| gmtplot       | Aval        | 分析值（数值型）                                        | AVAL    |
-| gmtplot       | Base        | 基线值（数值型）                                        | BASE    |
-| gmtplot       | YLabel      | Y轴标签                                                 |         |
-| gmtplot       | LegendLabel | 分组变量的图例标签                                      |         |
-| gmtplot       | colorSet    | 颜色设置（根据分组数量设置多个颜色）                    |         |
-| gmtplot       | LineYN      | 是否绘制折线图                                          | FALSE   |
-| gmtplot       | LegendYN    | 是否显示图例                                            | FALSE   |
-| gmtplot       | FigureName  | 输出图片名称                                            | gmtplot |
+| Function Name | Arguments   | Fucntion (Requirement)                                  | Default   |
+|---------------|-------------|---------------------------------------------------------|-----------|
+| gmtplot       | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |           |
+| gmtplot       | GrpVar      | 分组变量                                                | TRTAN     |
+| gmtplot       | GrpLabel    | 分组变量展示的标签                                      |           |
+| gmtplot       | AvisitnVar  | 分析访视变量（子分组变量）                              | AVISITN   |
+| gmtplot       | AvisintVal  | 需要纳入的分析访视数值型结果                            |           |
+| gmtplot       | AvisitLabel | 需要纳入的分析访视的标签                                |           |
+| gmtplot       | Aval        | 分析值（数值型）                                        | AVAL      |
+| gmtplot       | Base        | 基线值（数值型）                                        | BASE      |
+| gmtplot       | YLabel      | Y轴标签                                                 |           |
+| gmtplot       | LegendLabel | 分组变量的图例标签                                      |           |
+| gmtplot       | colorSet    | 颜色设置（根据分组数量设置多个颜色）                    |           |
+| gmtplot       | LineYN      | 是否绘制折线图                                          | FALSE     |
+| gmtplot       | LegendYN    | 是否显示图例                                            | FALSE     |
+| gmtplot       | FigureName  | 输出图片名称                                            | “gmtplot” |
 
 ### gmtplot_line
 
-| Function Name | Arguments   | Fucntion (Requirement)                                  | Default |
-|---------------|-------------|---------------------------------------------------------|---------|
-| gmtplot_line  | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |         |
-| gmtplot_line  | GrpVar      | 分组变量                                                | TRTAN   |
-| gmtplot_line  | GrpLabel    | 分组变量展示的标签                                      |         |
-| gmtplot_line  | AvisitnVar  | 分析访视变量（子分组变量）                              | AVISITN |
-| gmtplot_line  | AvisintVal  | 需要纳入的分析访视数值型结果                            |         |
-| gmtplot_line  | AvisitLabel | 需要纳入的分析访视的标签                                |         |
-| gmtplot_line  | Aval        | 分析值（数值型）                                        | AVAL    |
-| gmtplot_line  | Base        | 基线值（数值型）                                        | BASE    |
-| gmtplot_line  | YLabel      | Y轴标签                                                 |         |
-| gmtplot_line  | LegendLabel | 分组变量的图例标签                                      |         |
-| gmtplot_line  | colorSet    | 颜色设置（根据分组数量设置多个颜色）                    |         |
-| gmtplot_line  | LineYN      | 是否绘制折线图                                          | FALSE   |
-| gmtplot_line  | LegendYN    | 是否显示图例                                            | FALSE   |
-| gmtplot_line  | FigureName  | 输出图片名称                                            | gmtplot |
+| Function Name | Arguments   | Fucntion (Requirement)                                  | Default   |
+|---------------|-------------|---------------------------------------------------------|-----------|
+| gmtplot_line  | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |           |
+| gmtplot_line  | GrpVar      | 分组变量                                                | TRTAN     |
+| gmtplot_line  | GrpLabel    | 分组变量展示的标签                                      |           |
+| gmtplot_line  | AvisitnVar  | 分析访视变量（子分组变量）                              | AVISITN   |
+| gmtplot_line  | AvisintVal  | 需要纳入的分析访视数值型结果                            |           |
+| gmtplot_line  | AvisitLabel | 需要纳入的分析访视的标签                                |           |
+| gmtplot_line  | Aval        | 分析值（数值型）                                        | AVAL      |
+| gmtplot_line  | Base        | 基线值（数值型）                                        | BASE      |
+| gmtplot_line  | YLabel      | Y轴标签                                                 |           |
+| gmtplot_line  | LegendLabel | 分组变量的图例标签                                      |           |
+| gmtplot_line  | colorSet    | 颜色设置（根据分组数量设置多个颜色）                    |           |
+| gmtplot_line  | LineYN      | 是否绘制折线图                                          | FALSE     |
+| gmtplot_line  | LegendYN    | 是否显示图例                                            | FALSE     |
+| gmtplot_line  | FigureName  | 输出图片名称                                            | “gmtplot” |
+
+### aetoxgrplot
+
+| Function Name | Arguments  | Fucntion (Requirement)                       | Default                  |
+|---------------|------------|----------------------------------------------|--------------------------|
+| aetoxgrplot   | dataADSL   | 输入分析人群的数据集（ADSL）                 |                          |
+|               | dataADAE   | 输入分析事件的数据集（ADAE）                 |                          |
+| aetoxgrplot   | GrpVar     | 分组变量                                     | TRTAN                    |
+|               | GrpADSLVar | 分析人群数据集的分组变量                     | TRT01AN                  |
+| aetoxgrplot   | GrpLabel   | 分组变量展示的标签                           |                          |
+| aetoxgrplot   | ATOXGRN    | 分析访视变量（子分组变量）                   | ATOXGRN                  |
+| aetoxgrplot   | AEDECOD    | 需要纳入的分析访视数值型结果                 | AEDECOD                  |
+| aetoxgrplot   | Ylabel     | Y轴标签                                      | c(“不良事件发生率（%）”) |
+| aetoxgrplot   | colorSet   | 颜色设置（根据严重程度等级数量设置多个颜色） | c(“red”, “blue”, “grey”) |
+| aetoxgrplot   | FigureName | 输出图片名称                                 | “aetoxgrplot”            |
 
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
+### gmtplot
+
 ``` r
+{r example}
 library(gmtplot)
-#> Loading required package: tidyverse
-#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-#> ✔ dplyr     1.1.4     ✔ readr     2.1.4
-#> ✔ forcats   1.0.0     ✔ stringr   1.5.1
-#> ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-#> ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-#> ✔ purrr     1.0.2     
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter() masks stats::filter()
-#> ✖ dplyr::lag()    masks stats::lag()
-#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 library(haven)
 
 adis <- read_sas("adis.sas7bdat")
@@ -111,10 +118,30 @@ gmtplot(datain = adis,
         LineYN = FALSE,
         LegendYN = FALSE,
         FigureName = "gmt_plot")
-#> Adding missing grouping variables: `Avisitnum`, `lineheight`
-#> Warning: Removed 501 rows containing missing values (`position_stack()`).
-#> Warning: Removed 504 rows containing missing values (`geom_segment()`).
-#> [1] "gmt_plot.png"
+```
+
+### aetoxgrplot
+
+``` r
+{r example}
+adsl <- read_sas("adsl.sas7bdat") %>%
+  filter(SAFFL == "是") %>%
+  mutate(TRT01AN = if_else(AGE>=60, TRT01AN+2, TRT01AN))
+
+adae <- read_sas("adae.sas7bdat") %>%
+  filter(SAFFL == "是", AECAT == "征集性不良事件", AESCAT == "征集性全身不良事件", COHORTN == 1) %>% 
+  mutate(TRTAN = if_else(AGE>=60, TRTAN+2, TRTAN))
+
+aetoxgrplot(dataADSL = adsl,
+            dataADAE = adae,
+            GrpVar = adae$TRTAN,
+            GrpADSLVar = adsl$TRT01AN,
+            GrpLabel = c("V01A","B","C"),
+            ATOXGRN = adae$ATOXGRN,
+            AEDECOD = adae$AEDECOD,
+            Ylabel = c("不良事件发生率（%）"),
+            colorSet = c("red", "blue", "grey"),
+            FigureName = "aetox")
 ```
 
 ## Presentation
@@ -127,16 +154,11 @@ gmtplot(datain = adis,
 
 ![](images/IL4GHGL.png)
 
+### aetoxgrplot
+
+![](aetox.png)
+
 ## Additional Requirements
 
-The parameter “datain” from “gmtplot” function needs to generated per
-ADaM IG and includes main variables that will be used are listed as
-below.
-
-| Variable | Label                     |
-|----------|---------------------------|
-| USUBJID  | Unique Subject Identifier |
-| TRTAN    | Actual Treatment (N)      |
-| AVISITN  | Analysis Visit (N)        |
-| AVAL     | Analysis Value            |
-| BASE     | Baseline Value            |
+The dataset imported from .sas7bdat needs to generated per ADaM IG and
+includes main variables that will be used.
