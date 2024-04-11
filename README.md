@@ -18,6 +18,9 @@ from PharmaSUG.
 analysis value is linear, “gmtplot_line” will be used; if the analysis
 value is exponential, “gmtplot” function will be used.
 
+“aetoxgrplot” function is to draw adverse events toxicity grade plot in
+vaccine clinical trials.
+
 ## Installation
 
 You can install the development version of gmtplot from
@@ -73,9 +76,9 @@ devtools::install_github("AQ-Life/gmtplot")
 | Function Name | Arguments  | Fucntion (Requirement)                       | Default                  |
 |---------------|------------|----------------------------------------------|--------------------------|
 | aetoxgrplot   | dataADSL   | 输入分析人群的数据集（ADSL）                 |                          |
-|               | dataADAE   | 输入分析事件的数据集（ADAE）                 |                          |
+| aetoxgrplot   | dataADAE   | 输入分析事件的数据集（ADAE）                 |                          |
 | aetoxgrplot   | GrpVar     | 分组变量                                     | TRTAN                    |
-|               | GrpADSLVar | 分析人群数据集的分组变量                     | TRT01AN                  |
+| aetoxgrplot   | GrpADSLVar | 分析人群数据集的分组变量                     | TRT01AN                  |
 | aetoxgrplot   | GrpLabel   | 分组变量展示的标签                           |                          |
 | aetoxgrplot   | ATOXGRN    | 分析访视变量（子分组变量）                   | ATOXGRN                  |
 | aetoxgrplot   | AEDECOD    | 需要纳入的分析访视数值型结果                 | AEDECOD                  |
