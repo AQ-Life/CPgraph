@@ -5,8 +5,8 @@
 #' @param GrpVar group by numeric Column for events
 #' @param GrpADSLVar group by numeric Column for population
 #' @param GrpLabel a vector for group by column label
-#' @param ATOXGRN AETOXGR numeric column
-#' @param AEDECOD AEDECOD coding
+#' @param ATOXGRNVar AETOXGR numeric column
+#' @param AEDECODVar AEDECOD coding
 #' @param Ylabel a character for Y axis label
 #' @param colorSet a vector for color
 #' @param FigureName a character for figure name

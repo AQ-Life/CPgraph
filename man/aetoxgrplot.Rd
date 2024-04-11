@@ -28,15 +28,15 @@ aetoxgrplot(
 
 \item{GrpLabel}{a vector for group by column label}
 
+\item{ATOXGRNVar}{AETOXGR numeric column}
+
+\item{AEDECODVar}{AEDECOD coding}
+
 \item{Ylabel}{a character for Y axis label}
 
 \item{colorSet}{a vector for color}
 
 \item{FigureName}{a character for figure name}
-
-\item{ATOXGRN}{AETOXGR numeric column}
-
-\item{AEDECOD}{AEDECOD coding}
 }
 \value{
 a figure as ggplot2 object

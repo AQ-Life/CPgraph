@@ -28,7 +28,7 @@ You can install the development version of gmtplot from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("AQ-Life/gmtplot")
+devtools::install_github("AQ-Life/CPgraph")
 ```
 
 ## Arguments
@@ -80,8 +80,8 @@ devtools::install_github("AQ-Life/gmtplot")
 | aetoxgrplot   | GrpVar     | 分组变量                                     | TRTAN                    |
 | aetoxgrplot   | GrpADSLVar | 分析人群数据集的分组变量                     | TRT01AN                  |
 | aetoxgrplot   | GrpLabel   | 分组变量展示的标签                           |                          |
-| aetoxgrplot   | ATOXGRN    | 分析访视变量（子分组变量）                   | ATOXGRN                  |
-| aetoxgrplot   | AEDECOD    | 需要纳入的分析访视数值型结果                 | AEDECOD                  |
+| aetoxgrplot   | ATOXGRNVar | 分析访视变量（子分组变量）                   | ATOXGRN                  |
+| aetoxgrplot   | AEDECODVar | 需要纳入的分析访视数值型结果                 | AEDECOD                  |
 | aetoxgrplot   | Ylabel     | Y轴标签                                      | c(“不良事件发生率（%）”) |
 | aetoxgrplot   | colorSet   | 颜色设置（根据严重程度等级数量设置多个颜色） | c(“red”, “blue”, “grey”) |
 | aetoxgrplot   | FigureName | 输出图片名称                                 | “aetoxgrplot”            |
