@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# gmtplot
+# CPgraph
 
 <!-- badges: start -->
 
@@ -78,7 +78,7 @@ devtools::install_github("AQ-Life/gmtplot")
 
 ### aetoxgrplot
 
-| Function Name | Arguments  | Fucntion (Requirement)                       | Default                  |
+| Function Name | Arguments   | Fucntion (Requirement)                                  | Default   |
 |---------------|---------------|---------------------------|---------------|
 | aetoxgrplot   | dataADSL   | 输入分析人群的数据集（ADSL）                 |                          |
 | aetoxgrplot   | dataADAE   | 输入分析事件的数据集（ADAE）                 |                          |

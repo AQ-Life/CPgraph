@@ -1,7 +1,7 @@
-Package: gmtplot
+Package: CPgraph
 Type: Package
-Title: Generate Geometric Mean Titer Plot in Immunogenicity
-Version: 1.1
+Title: Generate Clinical Trials Graph in Immunogenicity
+Version: 1.2
 Author: Qi
 Maintainer: Qi <qi_luo2020@163.com>
 Description: More about what it does (maybe more than one line)
@@ -18,3 +18,4 @@ Imports:
     scales,
     showtext,
     sysfonts
+
