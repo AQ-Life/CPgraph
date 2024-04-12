@@ -21,9 +21,11 @@ value is exponential, “gmtplot” function will be used.
 “aetoxgrplot” function is to draw adverse events toxicity grade plot in
 vaccine clinical trials.
 
+“kmplot” function is to draw KM plot in oncology clinical trials.
+
 ## Installation
 
-You can install the development version of gmtplot from
+You can install the development version of CPgraph from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -85,6 +87,22 @@ devtools::install_github("AQ-Life/CPgraph")
 | aetoxgrplot   | Ylabel     | Y轴标签                                      | c(“不良事件发生率（%）”) |
 | aetoxgrplot   | colorSet   | 颜色设置（根据严重程度等级数量设置多个颜色） | c(“red”, “blue”, “grey”) |
 | aetoxgrplot   | FigureName | 输出图片名称                                 | “aetoxgrplot”            |
+
+### kmplot
+
+| Function Name | Arguments  | Fucntion (Requirement)               | Default  |
+|---------------|------------|--------------------------------------|----------|
+| kmplot        | datain     | 输入数据集（如ADTTE）                |          |
+| kmplot        | GrpVar     | 分组变量                             | TRTAN    |
+| kmplot        | GrpLabel   | 分组变量展示的标签                   |          |
+| kmplot        | AVALVar    | 时间-事件分析的TIME                  | AVAL     |
+| kmplot        | CNSRVar    | 时间-事件分析的CNSR                  | CNSR     |
+| kmplot        | ByTime     | X轴递进的步长                        |          |
+| kmplot        | XLabel     | X轴标签                              |          |
+| kmplot        | YLabel     | Y轴标签                              |          |
+| kmplot        | RiskLabel  | 风险表标签                           |          |
+| kmplot        | colorSet   | 颜色设置（根据分组数量设置多个颜色） |          |
+| kmplot        | FigureName | 输出图片名称                         | “kmplot” |
 
 ## Usage
 
@@ -172,6 +190,30 @@ aetoxgrplot(dataADSL = adsl,
 ```
 
 ![](images/aetox.png)
+
+kmplot
+
+``` r
+adtte <- read_sas("adtte.sas7bdat") %>%
+  filter(FASFL=='Y', ADAPT=='结直肠癌', PARAMCD=='OS') %>%
+  mutate(COHORTN = case_when(COHORT=="队列2" ~ 1,
+                             COHORT=="队列3-A" ~ 2,
+                             COHORT=="队列3-B" ~ 3))
+
+kmplot(datain = adtte,
+       GrpVar = adtte$COHORTN,
+       GrpLabel = c("Group A", "B","C"),
+       AVALVar = adtte$AVAL,
+       CNSRVar = adtte$CNSR,
+       ByTime = 2,
+       XLabel = "XXXX",
+       YLabel = "YYYY",
+       RiskLabel = "Number at risk",
+       colorSet = c("grey", "blue", "red"),
+       FigureName = "kmplot")
+```
+
+![](images/kmplot.png)
 
 ## Additional Requirements
 

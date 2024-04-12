@@ -27,9 +27,11 @@ The goal of this package is to draw general clinical trials graphs.
 
 "aetoxgrplot" function is to draw adverse events toxicity grade plot in vaccine clinical trials.
 
+"kmplot" function is to draw KM plot in oncology clinical trials.
+
 ## Installation
 
-You can install the development version of gmtplot from [GitHub](https://github.com/) with:
+You can install the development version of CPgraph from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -41,7 +43,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### gmtplot
 
 | Function Name | Arguments   | Fucntion (Requirement)                                  | Default   |
-|----------------|----------------|------------------------|----------------|
+|---------------|-------------|---------------------------------------------------------|-----------|
 | gmtplot       | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |           |
 | gmtplot       | GrpVar      | 分组变量                                                | TRTAN     |
 | gmtplot       | GrpLabel    | 分组变量展示的标签                                      |           |
@@ -60,7 +62,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### gmtplot_line
 
 | Function Name | Arguments   | Fucntion (Requirement)                                  | Default   |
-|----------------|----------------|------------------------|----------------|
+|---------------|-------------|---------------------------------------------------------|-----------|
 | gmtplot_line  | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |           |
 | gmtplot_line  | GrpVar      | 分组变量                                                | TRTAN     |
 | gmtplot_line  | GrpLabel    | 分组变量展示的标签                                      |           |
@@ -79,7 +81,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### aetoxgrplot
 
 | Function Name | Arguments  | Fucntion (Requirement)                       | Default                  |
-|----------------|----------------|------------------------|----------------|
+|---------------|------------|----------------------------------------------|--------------------------|
 | aetoxgrplot   | dataADSL   | 输入分析人群的数据集（ADSL）                 |                          |
 | aetoxgrplot   | dataADAE   | 输入分析事件的数据集（ADAE）                 |                          |
 | aetoxgrplot   | GrpVar     | 分组变量                                     | TRTAN                    |
@@ -90,6 +92,22 @@ devtools::install_github("AQ-Life/CPgraph")
 | aetoxgrplot   | Ylabel     | Y轴标签                                      | c("不良事件发生率（%）") |
 | aetoxgrplot   | colorSet   | 颜色设置（根据严重程度等级数量设置多个颜色） | c("red", "blue", "grey") |
 | aetoxgrplot   | FigureName | 输出图片名称                                 | "aetoxgrplot"            |
+
+### kmplot
+
+| Function Name | Arguments  | Fucntion (Requirement)               | Default  |
+|---------------|------------|--------------------------------------|----------|
+| kmplot        | datain     | 输入数据集（如ADTTE）                |          |
+| kmplot        | GrpVar     | 分组变量                             | TRTAN    |
+| kmplot        | GrpLabel   | 分组变量展示的标签                   |          |
+| kmplot        | AVALVar    | 时间-事件分析的TIME                  | AVAL     |
+| kmplot        | CNSRVar    | 时间-事件分析的CNSR                  | CNSR     |
+| kmplot        | ByTime     | X轴递进的步长                        |          |
+| kmplot        | XLabel     | X轴标签                              |          |
+| kmplot        | YLabel     | Y轴标签                              |          |
+| kmplot        | RiskLabel  | 风险表标签                           |          |
+| kmplot        | colorSet   | 颜色设置（根据分组数量设置多个颜色） |          |
+| kmplot        | FigureName | 输出图片名称                         | “kmplot” |
 
 ## Usage
 
@@ -177,6 +195,30 @@ aetoxgrplot(dataADSL = adsl,
 ```
 
 ![](images/aetox.png)
+
+kmplot
+
+``` r
+adtte <- read_sas("adtte.sas7bdat") %>%
+  filter(FASFL=='Y', ADAPT=='结直肠癌', PARAMCD=='OS') %>%
+  mutate(COHORTN = case_when(COHORT=="队列2" ~ 1,
+                             COHORT=="队列3-A" ~ 2,
+                             COHORT=="队列3-B" ~ 3))
+
+kmplot(datain = adtte,
+       GrpVar = adtte$COHORTN,
+       GrpLabel = c("Group A", "B","C"),
+       AVALVar = adtte$AVAL,
+       CNSRVar = adtte$CNSR,
+       ByTime = 2,
+       XLabel = "XXXX",
+       YLabel = "YYYY",
+       RiskLabel = "Number at risk",
+       colorSet = c("grey", "blue", "red"),
+       FigureName = "kmplot")
+```
+
+![](images/kmplot.png)
 
 ## Additional Requirements
 

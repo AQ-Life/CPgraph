@@ -17,5 +17,7 @@ Imports:
     plyr,
     scales,
     showtext,
-    sysfonts
+    sysfonts,
+    survival,
+    cowplot
 
