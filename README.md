@@ -191,7 +191,7 @@ aetoxgrplot(dataADSL = adsl,
 
 ![](images/aetox.png)
 
-kmplot
+### kmplot
 
 ``` r
 adtte <- read_sas("adtte.sas7bdat") %>%
