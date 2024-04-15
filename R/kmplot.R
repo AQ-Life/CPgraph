@@ -10,6 +10,9 @@
 #' @param YLabel a character for Y axis label
 #' @param RiskLabel a character for risktable label
 #' @param colorSet a vector for color
+#' @param ShowAreaYN whether draw area plot
+#' @param LineMedianYN whether draw reference line when y = 0.5
+#' @param PvalYN whether display P value
 #' @param FigureName a character for figure name
 #'
 #' @return a figure as ggplot2 object
@@ -37,6 +40,9 @@ kmplot <- function(datain,
                    YLabel,
                    RiskLabel,
                    colorSet,
+                   ShowAreaYN = FALSE,
+                   LineMedianYN = FALSE,
+                   PvalYN = FALSE,
                    FigureName = "kmplot"){
 
 anadata <- datain %>%
@@ -49,9 +55,8 @@ GrpLabelData <- data.frame(StratumNum = c(1:length(GrpLabel)),
 
 survdata <- data.frame()
 risktable <- data.frame()
+Xvline <- c()
 MaxAval <- ceiling(max(anadata$Aval))
-
-# browser()
 
 for (i in 1:length(GrpLabel)) {
   fitdata <- anadata %>%
@@ -79,11 +84,17 @@ for (i in 1:length(GrpLabel)) {
                       lower = risk1$lower,
                       StratumNum = i)
 
+  Xvline[i] <- median(fit)
+
   survdata <- bind_rows(survdata, fit1)
   risktable <- bind_rows(risktable, risk2)
 }
 
+Pvalue1 <- survdiff(Surv(Aval, Cnsr==0) ~ Trtan, data = anadata)
+Pvalue2 <- data.frame(chisq = Pvalue1$chisq, pvalue = Pvalue1$pvalue)
+PvalueText <- PvalueFormat(Pvalue1$pvalue)
 
+XendData <- as.data.frame(Xvline)
 
 dummy <- data.frame()
 for (i in seq(0, MaxAval, by = ByTime)) {
@@ -101,6 +112,7 @@ risktable <- left_join(dummy, risktable, by = c("time", "StratumNum")) %>%
 
 PlotColor <- colorRampPalette(colorSet)
 
+# browser()
 p1 <- ggplot(survdata) +
   geom_step(aes(x = time, y = surv, group = StratumNum, color = factor(StratumNum))) +
   geom_point(aes(x=time, y=surv_cnsr), shape = 3) +
@@ -111,6 +123,7 @@ p1 <- ggplot(survdata) +
   theme_classic()+
   scale_color_manual(values = PlotColor(length(GrpLabel)),
                      labels = GrpLabel)+
+  scale_fill_manual(values = PlotColor(length(GrpLabel)))+
   # coord_cartesian( clip = "off") +
   theme(legend.position = c(0.1,0.15),
         # legend.direction = "horizontal",
@@ -123,6 +136,19 @@ p1 <- ggplot(survdata) +
                             color = "black",
                             size = 10))
 
+if (ShowAreaYN == TRUE){
+p1 <- p1 + geom_ribbon(aes(x = time, ymin = lower, ymax = upper, group = StratumNum, fill = factor(StratumNum)), alpha = 0.2, show.legend = FALSE)
+}
+
+if (LineMedianYN == TRUE){
+  p1 <- p1 +
+    geom_segment(data=XendData, aes(x = max(Xvline, na.rm = TRUE), y = 0.5, xend = -Inf, yend = 0.5), linetype = 2, alpha = 0.2) +
+    geom_segment(data=XendData, aes(x = Xvline, y=-Inf, xend = Xvline, yend = 0.5), linetype = 2, alpha = 0.2)
+}
+
+if (PvalYN == TRUE){
+  p1 <- p1 + geom_text(x = MaxAval, y = 0.9, label = paste0("P = ",PvalueText), size = 3, hjust = "inward")
+}
 
 p2 <- ggplot(risktable) +
   geom_text(aes(x = time, y = -StratumNum, label = risk, color = factor(StratumNum)),

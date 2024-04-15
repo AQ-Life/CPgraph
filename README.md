@@ -90,19 +90,22 @@ devtools::install_github("AQ-Life/CPgraph")
 
 ### kmplot
 
-| Function Name | Arguments  | Fucntion (Requirement)               | Default  |
-|---------------|------------|--------------------------------------|----------|
-| kmplot        | datain     | 输入数据集（如ADTTE）                |          |
-| kmplot        | GrpVar     | 分组变量                             | TRTAN    |
-| kmplot        | GrpLabel   | 分组变量展示的标签                   |          |
-| kmplot        | AVALVar    | 时间-事件分析的TIME                  | AVAL     |
-| kmplot        | CNSRVar    | 时间-事件分析的CNSR                  | CNSR     |
-| kmplot        | ByTime     | X轴递进的步长                        |          |
-| kmplot        | XLabel     | X轴标签                              |          |
-| kmplot        | YLabel     | Y轴标签                              |          |
-| kmplot        | RiskLabel  | 风险表标签                           |          |
-| kmplot        | colorSet   | 颜色设置（根据分组数量设置多个颜色） |          |
-| kmplot        | FigureName | 输出图片名称                         | “kmplot” |
+| Function Name | Arguments    | Fucntion (Requirement)               | Default  |
+|---------------|--------------|--------------------------------------|----------|
+| kmplot        | datain       | 输入数据集（如ADTTE）                |          |
+| kmplot        | GrpVar       | 分组变量                             | TRTAN    |
+| kmplot        | GrpLabel     | 分组变量展示的标签                   |          |
+| kmplot        | AVALVar      | 时间-事件分析的TIME                  | AVAL     |
+| kmplot        | CNSRVar      | 时间-事件分析的CNSR                  | CNSR     |
+| kmplot        | ByTime       | X轴递进的步长                        |          |
+| kmplot        | XLabel       | X轴标签                              |          |
+| kmplot        | YLabel       | Y轴标签                              |          |
+| kmplot        | RiskLabel    | 风险表标签                           |          |
+| kmplot        | colorSet     | 颜色设置（根据分组数量设置多个颜色） |          |
+| kmplot        | ShowAreaYN   | 是否绘制置信区间的带状图             | FALSE    |
+| kmplot        | LineMedianYN | 是否在中位生存概率绘制参考线         | FALSE    |
+| kmplot        | PvalYN       | 是否添加log-rank P value             | FALSE    |
+| kmplot        | FigureName   | 输出图片名称                         | “kmplot” |
 
 ## Usage
 
