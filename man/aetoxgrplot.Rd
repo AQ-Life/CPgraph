@@ -13,7 +13,8 @@ aetoxgrplot(
   ATOXGRNVar = ATOXGRN,
   AEDECODVar = AEDECOD,
   Ylabel = c("不良事件发生率（\%）"),
-  colorSet = c("red", "blue", "grey"),
+  LegendLabel = c("一级", "二级", "三级及以上"),
+  colorSet = c("grey", "blue", "red"),
   FigureName = "aetoxgrplot"
 )
 }
@@ -33,6 +34,8 @@ aetoxgrplot(
 \item{AEDECODVar}{AEDECOD coding}
 
 \item{Ylabel}{a character for Y axis label}
+
+\item{LegendLabel}{a vector for legend label}
 
 \item{colorSet}{a vector for color}
 

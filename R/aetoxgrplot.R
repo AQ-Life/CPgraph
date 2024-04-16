@@ -8,6 +8,7 @@
 #' @param ATOXGRNVar AETOXGR numeric column
 #' @param AEDECODVar AEDECOD coding
 #' @param Ylabel a character for Y axis label
+#' @param LegendLabel a vector for legend label
 #' @param colorSet a vector for color
 #' @param FigureName a character for figure name
 #'
@@ -33,7 +34,8 @@ aetoxgrplot <- function(dataADSL,
                         ATOXGRNVar = ATOXGRN,
                         AEDECODVar = AEDECOD,
                         Ylabel = c("不良事件发生率（%）"),
-                        colorSet = c("red", "blue", "grey"),
+                        LegendLabel = c("一级", "二级", "三级及以上"),
+                        colorSet = c("grey", "blue", "red"),
                         FigureName = "aetoxgrplot"){
 
 sysfonts::font_add(family = "KT", regular = "simkai.ttf")
@@ -109,8 +111,8 @@ final <- bind_rows(freq3, freq3_missing)
 
 # browser()
 
-GMTPlotColor <- colorRampPalette(c("red", "blue", "grey"))
-LegendLabel <- c("三级及以上", "二级", "一级")
+colorData <- data.frame(colorvalue = colorSet,
+                        Legendvalue = LegendLabel)
 
 fig_width <- case_when(
   max(final$order) <= 9 ~ 3.5,
@@ -135,8 +137,8 @@ p <- ggplot() +
                      expand = c(0, 0))+
   scale_x_discrete(labels = arrange(distinct(final,AEDECOD, order), order)$AEDECOD)+
   labs(y = Ylabel, x = NULL) +
-  scale_fill_manual(values = GMTPlotColor(length(unique(final$ATOXGRN))),
-                    label = LegendLabel)+
+  scale_fill_manual(values = colorData$colorvalue,
+                    label = colorData$Legendvalue)+
   coord_cartesian(ylim = c(0, 100),
                   clip = "off") +
   theme(legend.title = element_blank(),

@@ -23,6 +23,9 @@ vaccine clinical trials.
 
 “kmplot” function is to draw KM plot in oncology clinical trials.
 
+“waterfallplot” function is to draw waterfallplot in oncology clinical
+trials.
+
 ## Installation
 
 You can install the development version of CPgraph from
@@ -75,18 +78,19 @@ devtools::install_github("AQ-Life/CPgraph")
 
 ### aetoxgrplot
 
-| Function Name | Arguments  | Fucntion (Requirement)                       | Default                  |
-|---------------|------------|----------------------------------------------|--------------------------|
-| aetoxgrplot   | dataADSL   | 输入分析人群的数据集（ADSL）                 |                          |
-| aetoxgrplot   | dataADAE   | 输入分析事件的数据集（ADAE）                 |                          |
-| aetoxgrplot   | GrpVar     | 分组变量                                     | TRTAN                    |
-| aetoxgrplot   | GrpADSLVar | 分析人群数据集的分组变量                     | TRT01AN                  |
-| aetoxgrplot   | GrpLabel   | 分组变量展示的标签                           |                          |
-| aetoxgrplot   | ATOXGRNVar | 分析访视变量（子分组变量）                   | ATOXGRN                  |
-| aetoxgrplot   | AEDECODVar | 需要纳入的分析访视数值型结果                 | AEDECOD                  |
-| aetoxgrplot   | Ylabel     | Y轴标签                                      | c(“不良事件发生率（%）”) |
-| aetoxgrplot   | colorSet   | 颜色设置（根据严重程度等级数量设置多个颜色） | c(“red”, “blue”, “grey”) |
-| aetoxgrplot   | FigureName | 输出图片名称                                 | “aetoxgrplot”            |
+| Function Name | Arguments   | Fucntion (Requirement)                       | Default                         |
+|---------------|-------------|----------------------------------------------|---------------------------------|
+| aetoxgrplot   | dataADSL    | 输入分析人群的数据集（ADSL）                 |                                 |
+| aetoxgrplot   | dataADAE    | 输入分析事件的数据集（ADAE）                 |                                 |
+| aetoxgrplot   | GrpVar      | 分组变量                                     | TRTAN                           |
+| aetoxgrplot   | GrpADSLVar  | 分析人群数据集的分组变量                     | TRT01AN                         |
+| aetoxgrplot   | GrpLabel    | 分组变量展示的标签                           |                                 |
+| aetoxgrplot   | ATOXGRNVar  | 分析访视变量（子分组变量）                   | ATOXGRN                         |
+| aetoxgrplot   | AEDECODVar  | 需要纳入的分析访视数值型结果                 | AEDECOD                         |
+| aetoxgrplot   | Ylabel      | Y轴标签                                      | c(“不良事件发生率（%）”)        |
+| aetoxgrplot   | LegendLabel | 严重程度等级的标签                           | c(“一级”, “二级”, “三级及以上”) |
+| aetoxgrplot   | colorSet    | 颜色设置（根据严重程度等级数量设置多个颜色） | c(“grey”, “blue”, “red”)        |
+| aetoxgrplot   | FigureName  | 输出图片名称                                 | “aetoxgrplot”                   |
 
 ### kmplot
 
@@ -107,6 +111,19 @@ devtools::install_github("AQ-Life/CPgraph")
 | kmplot        | PvalYN       | 是否添加log-rank P value             | FALSE    |
 | kmplot        | FigureName   | 输出图片名称                         | “kmplot” |
 
+### waterfallplot
+
+| Function Name | Arguments    | Fucntion (Requirement)                   | Default                                     |
+|---------------|--------------|------------------------------------------|---------------------------------------------|
+| waterfallplot | datain       | 输入数据集                               |                                             |
+| waterfallplot | BORVar       | BOR分组变量名                            |                                             |
+| waterfallplot | CHGVar       | Y轴百分比变量名                          |                                             |
+| waterfallplot | PercentLine1 | 百分比参考线1                            | FALSE                                       |
+| waterfallplot | PercentLine2 | 百分比参考线2                            | FALSE                                       |
+| waterfallplot | YLabel       | Y轴标签                                  |                                             |
+| waterfallplot | colorSet     | 颜色设置（为CR,PR,SD,PR,NE分别设置颜色） | c(“green”, “blue”, “yellow”, “red”, “grey”) |
+| waterfallplot | FigureName   | 输出图片名称                             | “waterfallplot”                             |
+
 ## Usage
 
 This is a basic example which shows you how to solve a common problem.
@@ -115,7 +132,7 @@ This is a basic example which shows you how to solve a common problem.
 
 ``` r
 # {r example}
-library(gmtplot)
+library(CPgraph)
 library(haven)
 
 adis <- read_sas("adis.sas7bdat")
@@ -150,6 +167,9 @@ gmtplot(datain = adis,
 
 ``` r
 # {r example}
+library(CPgraph)
+library(haven)
+
 gmtplot_line(datain = adis2,
         GrpVar = adis2$GVAR,
         GrpLabel = c("<40 yrs", "40-49 yrs", ">=50 yrs"),
@@ -172,6 +192,9 @@ gmtplot_line(datain = adis2,
 
 ``` r
 # {r example}
+library(CPgraph)
+library(haven)
+
 adsl <- read_sas("adsl.sas7bdat") %>%
   filter(SAFFL == "是") %>%
   mutate(TRT01AN = if_else(AGE>=60,TRT01AN+2, TRT01AN))
@@ -188,7 +211,8 @@ aetoxgrplot(dataADSL = adsl,
             ATOXGRN = adae$ATOXGRN,
             AEDECOD = adae$AEDECOD,
             Ylabel = c("不良事件发生率（%）"),
-            colorSet = c("red", "blue", "grey"),
+            LegendLabel = c("一级", "二级", "三级及以上"),
+            colorSet = c("grey", "blue", "red"),
             FigureName = "aetox")
 ```
 
@@ -197,6 +221,9 @@ aetoxgrplot(dataADSL = adsl,
 ### kmplot
 
 ``` r
+library(CPgraph)
+library(haven)
+
 adtte <- read_sas("adtte.sas7bdat") %>%
   filter(FASFL=='Y', ADAPT=='结直肠癌', PARAMCD=='OS') %>%
   mutate(COHORTN = case_when(COHORT=="队列2" ~ 1,
@@ -213,10 +240,35 @@ kmplot(datain = adtte,
        YLabel = "YYYY",
        RiskLabel = "Number at risk",
        colorSet = c("grey", "blue", "red"),
+       ShowAreaYN = TRUE,
+       LineMedianYN = TRUE,
+       PvalYN = TRUE,
        FigureName = "kmplot")
 ```
 
 ![](images/kmplot.png)
+
+### waterfallplot
+
+``` r
+library(CPgraph)
+library(haven)
+
+water <- read_sas("waterfalldata.sas7bdat")
+
+head(water)
+
+waterfallplot(water,
+              BORVar = water$bor,
+              CHGVar = water$chgx,
+              PercentLine1 = 30,
+              PercentLine2 = -20,
+              YLabel = "Change from Baseline",
+              colorSet = c("green", "blue", "yellow", "red", "grey"),
+              FigureName = "waterfallplot")
+```
+
+![](images/waterfallplot.png)
 
 ## Additional Requirements
 
