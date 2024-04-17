@@ -21,6 +21,7 @@
 #' YLabel = "Change from Baseline",
 #' colorSet = c("green", "blue", "yellow", "red", "grey"),
 #' FigureName = "waterfallplot")
+#'
 waterfallplot <- function(datain,
                           BORVar,
                           CHGVar,

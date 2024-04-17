@@ -1,6 +1,6 @@
 Package: CPgraph
 Type: Package
-Title: Generate Clinical Trials Graph in Immunogenicity
+Title: Generate Clinical Trials Graph
 Version: 1.2
 Author: Qi
 Maintainer: Qi <qi_luo2020@163.com>

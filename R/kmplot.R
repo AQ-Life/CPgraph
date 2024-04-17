@@ -30,6 +30,7 @@
 #' RiskLabel = "Number at risk",
 #' colorSet = c("grey", "blue", "red"),
 #' FigureName = "kmplot")
+#'
 kmplot <- function(datain,
                    GrpVar = TRTAN,
                    GrpLabel,

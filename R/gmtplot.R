@@ -20,6 +20,7 @@
 #'
 #' @examples
 #' gmtplot(adis,"gmt_plot")
+#'
 gmtplot <- function(datain,
                     GrpVar = TRTAN,
                     GrpLabel,

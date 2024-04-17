@@ -58,4 +58,5 @@ draw GMT plot
 }
 \examples{
 gmtplot(adis,"gmt_plot")
+
 }

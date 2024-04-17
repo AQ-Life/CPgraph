@@ -26,6 +26,8 @@ vaccine clinical trials.
 “waterfallplot” function is to draw waterfallplot in oncology clinical
 trials.
 
+“forsetplot” function is to draw forestplot in oncology clinical trials.
+
 ## Installation
 
 You can install the development version of CPgraph from
@@ -123,6 +125,46 @@ devtools::install_github("AQ-Life/CPgraph")
 | waterfallplot | YLabel       | Y轴标签                                  |                                             |
 | waterfallplot | colorSet     | 颜色设置（为CR,PR,SD,PR,NE分别设置颜色） | c(“green”, “blue”, “yellow”, “red”, “grey”) |
 | waterfallplot | FigureName   | 输出图片名称                             | “waterfallplot”                             |
+
+### forestplot
+
+| Function Name | Arguments     | Fucntion (Requirement)               | Default      |
+|---------------|---------------|--------------------------------------|--------------|
+| forestplot    | datain        | 输入数据集                           |              |
+| forestplot    | XVar          | 绘制散点图的X轴变量                  |              |
+| forestplot    | XLowVar       | 置信区间下限                         |              |
+| forestplot    | XUppVar       | 置信区间上限                         |              |
+| forestplot    | YOrderVar     | Y轴的数值型变量（从1，2，3…)         |              |
+| forestplot    | XLine         | X轴上的参考线的数值型值              |              |
+| forestplot    | YRefVar       | 绘制背景色块的Y值（来源于YOrderVar） |              |
+| forestplot    | YRefWidth     | 背景色块的高度                       |              |
+| forestplot    | Anno1Var      | 第1列注释的变量                      |              |
+| forestplot    | Anno1VarX     | 第1列注释变量在X轴的坐标             |              |
+| forestplot    | Anno1VarLabel | 第1列注释变量的Label                 |              |
+| forestplot    | Anno2Var      | 第2列注释的变量                      |              |
+| forestplot    | Anno2VarX     | 第2列注释变量在X轴的坐标             |              |
+| forestplot    | Anno2VarLabel | 第2列注释变量的Label                 |              |
+| forestplot    | Anno3Var      | 第3列注释的变量                      |              |
+| forestplot    | Anno3VarX     | 第3列注释变量在X轴的坐标             |              |
+| forestplot    | Anno3VarLabel | 第3列注释变量的Label                 |              |
+| forestplot    | Anno4Var      | 第4列注释的变量                      |              |
+| forestplot    | Anno4VarX     | 第4列注释变量在X轴的坐标             |              |
+| forestplot    | Anno4VarLabel | 第4列注释变量的Label                 |              |
+| forestplot    | Anno5Var      | 第5列注释的变量                      |              |
+| forestplot    | Anno5VarX     | 第5列注释变量在X轴的坐标             |              |
+| forestplot    | Anno5VarLabel | 第5列注释变量的Label                 |              |
+| forestplot    | Anno6Var      | 第6列注释的变量                      |              |
+| forestplot    | Anno6VarX     | 第6列注释变量在X轴的坐标             |              |
+| forestplot    | Anno6VarLabel | 第6列注释变量的Label                 |              |
+| forestplot    | AnnoLineLabel | XLine参数的Label                     |              |
+| forestplot    | XaxisValue    | X轴上需要展示X的值                   |              |
+| forestplot    | XaxisLabel    | X轴上展示的X值的Label                |              |
+| forestplot    | XaxisType     | X轴的类型（“line”, “log”）           |              |
+| forestplot    | leftmargin    | 图形左侧预留的空间                   |              |
+| forestplot    | rightmargin   | 图形右侧预留的空间                   |              |
+| forestplot    | figwidth      | 输出图片宽度                         |              |
+| forestplot    | figheight     | 输出图片高度                         |              |
+| forestplot    | FigureName    | 输出图片名称                         | “forestplot” |
 
 ## Usage
 
@@ -269,6 +311,55 @@ waterfallplot(water,
 ```
 
 ![](images/waterfallplot.png)
+
+### forestplot
+
+``` r
+forestdata <- read_sas("forestdata.sas7bdat")
+
+final <- forestdata %>%
+  mutate(ref = if_else(yord %in% c(4,5,6,10,11,12,16,17,18,19), NA, yord))
+
+forestplot(
+  datain = final,
+  XVar = final$means,
+  XLowVar = final$yerrl,
+  XUppVar = final$yerru,
+  YOrderVar = final$yord,
+  XLine = 1,
+  YRefVar = final$ref,
+  YRefWidth = 4.9,
+  Anno1Var = final$col1,
+  Anno1VarX = 10^-3,
+  Anno1VarLabel = "D14 Subgroup",
+  Anno2Var = final$col2,
+  Anno2VarX = 3*10^-2,
+  Anno2VarLabel = "V01E GMT",
+  Anno3Var = final$col3,
+  Anno3VarX = 10^-1,
+  Anno3VarLabel = "V01E-2 GMT",
+  Anno4Var = final$col5,
+  Anno4VarX = 4*10^1,
+  Anno4VarLabel = "LS GMR 95% CI",
+  Anno5Var = NULL,
+  Anno5VarX = NULL,
+  Anno5VarLabel = NULL,
+  Anno6Var = NULL,
+  Anno6VarX = NULL,
+  Anno6VarLabel = NULL,
+  AnnoLineLabel = "LS GMR 95% CI",
+  XaxisValue = c(0.1, 1, 10),
+  XaxisLabel = c("<0.1", "1", ">=10"),
+  XaxisType = "log",
+  leftmargin = 9.5,
+  rightmargin = 4.5,
+  figwidth = 9,
+  figheight = 4,
+  FigureName = "forestplot"
+)
+```
+
+![](images/forestplot.png)
 
 ## Additional Requirements
 

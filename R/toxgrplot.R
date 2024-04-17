@@ -16,17 +16,8 @@
 #' @export
 #'
 #' @examples
-#' aetoxgrplot(dataADSL = adsl,
-#' dataADAE = adae,
-#' GrpVar = TRTAN,
-#' GrpADSLVar = TRT01AN,
-#' GrpLabel = c("V01A", "V01B"),
-#' ATOXGRN = ATOXGRN,
-#' AEDECOD = AEDECOD,
-#' Ylabel = c("不良事件发生率（%）"),
-#' colorSet = c("red", "blue", "grey"),
-#' FigureName = "aetox")
-aetoxgrplot <- function(dataADSL,
+#' toxgrplot(dataADSL = adsl,dataADAE = adae,GrpVar = TRTAN,GrpADSLVar = TRT01AN,GrpLabel = c("V01A", "V01B"),ATOXGRN = ATOXGRN,AEDECOD = AEDECOD,Ylabel = c("不良事件发生率（%）"),colorSet = c("red", "blue", "grey"), FigureName = "aetox")
+toxgrplot <- function(dataADSL,
                         dataADAE,
                         GrpVar = TRTAN,
                         GrpADSLVar = TRT01AN,

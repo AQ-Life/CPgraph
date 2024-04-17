@@ -47,4 +47,5 @@ PercentLine2 = FALSE,
 YLabel = "Change from Baseline",
 colorSet = c("green", "blue", "yellow", "red", "grey"),
 FigureName = "waterfallplot")
+
 }

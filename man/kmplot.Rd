@@ -68,4 +68,5 @@ YLabel = "YYYY",
 RiskLabel = "Number at risk",
 colorSet = c("grey", "blue", "red"),
 FigureName = "kmplot")
+
 }
