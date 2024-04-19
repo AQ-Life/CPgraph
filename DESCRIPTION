@@ -19,5 +19,6 @@ Imports:
     showtext,
     sysfonts,
     survival,
-    cowplot
+    cowplot,
+    ggprism
 

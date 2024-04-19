@@ -28,6 +28,9 @@ trials.
 
 “forsetplot” function is to draw forestplot in oncology clinical trials.
 
+“swimmerplot” function is to draw swimmerplot in oncology clinical
+trials.
+
 ## Installation
 
 You can install the development version of CPgraph from
@@ -165,6 +168,85 @@ devtools::install_github("AQ-Life/CPgraph")
 | forestplot    | figwidth      | 输出图片宽度                         |              |
 | forestplot    | figheight     | 输出图片高度                         |              |
 | forestplot    | FigureName    | 输出图片名称                         | “forestplot” |
+
+### swimmerplot
+
+| Function Name | Arguments      | Fucntion (Requirement)      | Default   |
+|---------------|----------------|-----------------------------|-----------|
+| swimmerplot   | datain         | 输入数据集                  |           |
+| swimmerplot   | YaxisVar       | Y轴变量（离散型）           |           |
+| swimmerplot   | BarVar         | 绘制条形图的变量            |           |
+| swimmerplot   | BarColor       | 条形图的颜色                |           |
+| swimmerplot   | BarWidth       | 条形图的宽度                |           |
+| swimmerplot   | BarLabel       | 条形图的label               |           |
+| swimmerplot   | BarLabelY      | 条形图label在Y轴的位置      |           |
+| swimmerplot   | Line1VarMin    | 第1个线图在X轴的起点        |           |
+| swimmerplot   | Line1VarMax    | 第1个线图在X轴的终点        |           |
+| swimmerplot   | Line1color     | 第1个线图的颜色             |           |
+| swimmerplot   | Line1Width     | 第1个线图的宽度             |           |
+| swimmerplot   | Line1Label     | 第1个线图的label            |           |
+| swimmerplot   | Line1LabelY    | 第1个线图的label在Y轴的位置 |           |
+| swimmerplot   | Line2VarMin    | 第2个线图在X轴的起点        |           |
+| swimmerplot   | Line2VarMax    | 第2个线图在X轴的终点        |           |
+| swimmerplot   | Line2color     | 第2个线图的颜色             |           |
+| swimmerplot   | Line2Width     | 第2个线图的宽度             |           |
+| swimmerplot   | Line2Label     | 第2个线图的label            |           |
+| swimmerplot   | Line2LabelY    | 第2个线图的label在Y轴的位置 |           |
+| swimmerplot   | Line3VarMin    | 第3个线图在X轴的起点        |           |
+| swimmerplot   | Line3VarMax    | 第3个线图在X轴的终点        |           |
+| swimmerplot   | Line3color     | 第3个线图的颜色             |           |
+| swimmerplot   | Line3Width     | 第3个线图的宽度             |           |
+| swimmerplot   | Line3Label     | 第3个线图的label            |           |
+| swimmerplot   | Line3LabelY    | 第3个线图的label在Y轴的位置 |           |
+| swimmerplot   | Point1Var      | 第1个点图的变量             |           |
+| swimmerplot   | Point1Color    | 第1个点图的颜色             |           |
+| swimmerplot   | Point1Shape    | 第1个点图的形状             |           |
+| swimmerplot   | Point1Label    | 第1个点图的label            |           |
+| swimmerplot   | Point1LabelY   | 第1个点图的label在Y轴的位置 |           |
+| swimmerplot   | Point2Var      | 第2个点图的变量             |           |
+| swimmerplot   | Point2Color    | 第2个点图的颜色             |           |
+| swimmerplot   | Point2Shape    | 第2个点图的形状             |           |
+| swimmerplot   | Point2Label    | 第2个点图的label            |           |
+| swimmerplot   | Point2LabelY   | 第2个点图的label在Y轴的位置 |           |
+| swimmerplot   | Point3Var      | 第3个点图的变量             |           |
+| swimmerplot   | Point3Color    | 第3个点图的颜色             |           |
+| swimmerplot   | Point3Shape    | 第3个点图的形状             |           |
+| swimmerplot   | Point3Label    | 第3个点图的label            |           |
+| swimmerplot   | Point3LabelY   | 第3个点图的label在Y轴的位置 |           |
+| swimmerplot   | Point4Var      | 第4个点图的变量             |           |
+| swimmerplot   | Point4Color    | 第4个点图的颜色             |           |
+| swimmerplot   | Point4Shape    | 第4个点图的形状             |           |
+| swimmerplot   | Point4Label    | 第4个点图的label            |           |
+| swimmerplot   | Point4LabelY   | 第4个点图的label在Y轴的位置 |           |
+| swimmerplot   | Point5Var      | 第5个点图的变量             |           |
+| swimmerplot   | Point5Color    | 第5个点图的颜色             |           |
+| swimmerplot   | Point5Shape    | 第5个点图的形状             |           |
+| swimmerplot   | Point5Label    | 第5个点图的label            |           |
+| swimmerplot   | Point5LabelY   | 第5个点图的label在Y轴的位置 |           |
+| swimmerplot   | Point6Var      | 第6个点图的变量             |           |
+| swimmerplot   | Point6Color    | 第6个点图的颜色             |           |
+| swimmerplot   | Point6Shape    | 第6个点图的形状             |           |
+| swimmerplot   | Point6Label    | 第6个点图的label            |           |
+| swimmerplot   | Point6LabelY   | 第6个点图的label在Y轴的位置 |           |
+| swimmerplot   | Point7Var      | 第7个点图的变量             |           |
+| swimmerplot   | Point7Color    | 第7个点图的颜色             |           |
+| swimmerplot   | Point7Shape    | 第7个点图的形状             |           |
+| swimmerplot   | Point7Label    | 第7个点图的label            |           |
+| swimmerplot   | Point7LabelY   | 第7个点图的label在Y轴的位置 |           |
+| swimmerplot   | Point8Var      | 第8个点图的变量             |           |
+| swimmerplot   | Point8Color    | 第8个点图的颜色             |           |
+| swimmerplot   | Point8Shape    | 第8个点图的形状             |           |
+| swimmerplot   | Point8Label    | 第8个点图的label            |           |
+| swimmerplot   | Point8LabelY   | 第8个点图的label在Y轴的位置 |           |
+| swimmerplot   | Segment1Var    | 第1个箭头的变量             |           |
+| swimmerplot   | Segment1Color  | 第1个箭头的颜色             |           |
+| swimmerplot   | Segment1Label  | 第1个箭头的label            |           |
+| swimmerplot   | Segment1LabelY | 第1个箭头的label在Y轴的位置 |           |
+| swimmerplot   | XaxisLabel     | X轴label                    |           |
+| swimmerplot   | YaxisLabel     | Y轴label                    |           |
+| swimmerplot   | figwidth       | 图片的宽度                  |           |
+| swimmerplot   | figheight      | 图片的高度                  |           |
+| swimmerplot   | FigureName     | 输出图片名称                | “gmtplot” |
 
 ## Usage
 
@@ -360,6 +442,51 @@ forestplot(
 ```
 
 ![](images/forestplot.png)
+
+### swimmerplot
+
+``` r
+library(readxl)
+
+swimmerdata <- read_excel("f_14_4_2_1_swimmer.xlsx",
+                          sheet="f_14_4_2_1_swimmer",
+                          col_names = TRUE)
+
+swimmerplot(datain = swimmerdata,
+            YaxisVar = swimmerdata$SUBJID,
+            BarVar = swimmerdata$trtedy,
+            BarColor = "grey",
+            BarWidth = 0.01,
+            BarLabel = "研究持续时间",
+            BarLabelY = 17,
+            Line1VarMin = swimmerdata$startdr,
+            Line1VarMax = swimmerdata$enddy,
+            Line1color = "blue",
+            Line1Width = 2,
+            Line1Label = "缓解持续时间",
+            Line1LabelY = 15,
+            Point1Var = swimmerdata$pddy,
+            Point1Color = "black",
+            Point1Shape = 15,
+            Point1Label = "疾病进展",
+            Point1LabelY = 13,
+            Point2Var = swimmerdata$dthdy,
+            Point2Color = "red",
+            Point2Shape = 16,
+            Point2Label = "死亡",
+            Point2LabelY = 11,
+            Segment1Var = swimmerdata$exongo,
+            Segment1Color = "brown",
+            Segment1Label = "治疗持续",
+            Segment1LabelY = 9,
+            XaxisLabel = "相对首次给药时间月",
+            YaxisLabel = "受试者编号",
+            figwidth = 9,
+            figheight = 5,
+            FigureName = "swimmerplot")
+```
+
+![](images/swimmerplot.png)
 
 ## Additional Requirements
 
