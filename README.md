@@ -248,6 +248,22 @@ devtools::install_github("AQ-Life/CPgraph")
 | swimmerplot   | figheight      | 图片的高度                  |           |
 | swimmerplot   | FigureName     | 输出图片名称                | “gmtplot” |
 
+### spiderplot
+
+| Function Name | Arguments  | Fucntion (Requirement)                        | Default                                      |
+|---------------|------------|-----------------------------------------------|----------------------------------------------|
+| spiderplot    | datain     | 输入数据集                                    |                                              |
+| spiderplot    | GrpSubjVar | 受试者编号变量                                |                                              |
+| spiderplot    | XaxisVar   | X轴变量                                       |                                              |
+| spiderplot    | YaxisVar   | Y轴变量                                       |                                              |
+| spiderplot    | GrpVar     | 线图分组变量                                  |                                              |
+| spiderplot    | YLine1     | 第1个Y轴参考线值                              | 20                                           |
+| spiderplot    | Yline2     | 第2个Y轴参考线值                              | -30                                          |
+| spiderplot    | colorSet   | 颜色设置（为CR, PR, SD, PD, NE 分别设置颜色） | c(“blue”, “red”, “green”, “black”, “yellow”) |
+| spiderplot    | XLabel     | X轴标签                                       |                                              |
+| spiderplot    | YLabel     | Y轴标签                                       |                                              |
+| spiderplot    | FigureName | 输出图片名称                                  | “spiderplot”                                 |
+
 ## Usage
 
 This is a basic example which shows you how to solve a common problem.
@@ -487,6 +503,26 @@ swimmerplot(datain = swimmerdata,
 ```
 
 ![](images/swimmerplot.png)
+
+### spiderplot
+
+``` r
+spiderdata <- read_sas("f_spider.sas7bdat")
+
+spiderplot(datain = spiderdata,
+           GrpSubjVar = spiderdata$Subject,
+           XaxisVar = spiderdata$durx,
+           YaxisVar = spiderdata$chgx,
+           GrpVar = spiderdata$BOR,
+           YLine1 = 20,
+           Yline2 = -30,
+           colorSet = c("blue", "red", "green", "black", "yellow"),
+           XLabel = "Time Since Treatment Initiation (months)",
+           YLabel = "Tumor Change From Baseline",
+           FigureName = "spiderplot")
+```
+
+![](images/spiderplot.png)
 
 ## Additional Requirements
 

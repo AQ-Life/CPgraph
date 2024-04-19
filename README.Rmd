@@ -49,7 +49,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### gmtplot
 
 | Function Name | Arguments   | Fucntion (Requirement)                                  | Default   |
-|---------------|---------------|---------------------------|---------------|
+|-----------------|-----------------|----------------------|-----------------|
 | gmtplot       | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |           |
 | gmtplot       | GrpVar      | 分组变量                                                | TRTAN     |
 | gmtplot       | GrpLabel    | 分组变量展示的标签                                      |           |
@@ -68,7 +68,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### gmtplot_line
 
 | Function Name | Arguments   | Fucntion (Requirement)                                  | Default   |
-|---------------|---------------|---------------------------|---------------|
+|-----------------|-----------------|----------------------|-----------------|
 | gmtplot_line  | datain      | 输入数据集（需包含USUBJID, TRTAN, AVISITN, AVAL, BASE） |           |
 | gmtplot_line  | GrpVar      | 分组变量                                                | TRTAN     |
 | gmtplot_line  | GrpLabel    | 分组变量展示的标签                                      |           |
@@ -87,7 +87,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### aetoxgrplot
 
 | Function Name | Arguments   | Fucntion (Requirement)                       | Default                         |
-|-----------------|-----------------|----------------------|-----------------|
+|-----------------|-----------------|--------------------|-----------------|
 | aetoxgrplot   | dataADSL    | 输入分析人群的数据集（ADSL）                 |                                 |
 | aetoxgrplot   | dataADAE    | 输入分析事件的数据集（ADAE）                 |                                 |
 | aetoxgrplot   | GrpVar      | 分组变量                                     | TRTAN                           |
@@ -103,7 +103,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### kmplot
 
 | Function Name | Arguments    | Fucntion (Requirement)               | Default  |
-|----------------|----------------|------------------------|----------------|
+|-----------------|-----------------|---------------------|-----------------|
 | kmplot        | datain       | 输入数据集（如ADTTE）                |          |
 | kmplot        | GrpVar       | 分组变量                             | TRTAN    |
 | kmplot        | GrpLabel     | 分组变量展示的标签                   |          |
@@ -122,7 +122,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### waterfallplot
 
 | Function Name | Arguments    | Fucntion (Requirement)                   | Default                                     |
-|-----------------|-----------------|-------------------|--------------------|
+|------------------|------------------|------------------|-------------------|
 | waterfallplot | datain       | 输入数据集                               |                                             |
 | waterfallplot | BORVar       | BOR分组变量名                            |                                             |
 | waterfallplot | CHGVar       | Y轴百分比变量名                          |                                             |
@@ -135,7 +135,7 @@ devtools::install_github("AQ-Life/CPgraph")
 ### forestplot
 
 | Function Name | Arguments     | Fucntion (Requirement)               | Default      |
-|-----------------|-----------------|-----------------------|-----------------|
+|-----------------|-----------------|--------------------|-----------------|
 | forestplot    | datain        | 输入数据集                           |              |
 | forestplot    | XVar          | 绘制散点图的X轴变量                  |              |
 | forestplot    | XLowVar       | 置信区间下限                         |              |
@@ -250,6 +250,22 @@ devtools::install_github("AQ-Life/CPgraph")
 | swimmerplot   | figwidth       | 图片的宽度                  |           |
 | swimmerplot   | figheight      | 图片的高度                  |           |
 | swimmerplot   | FigureName     | 输出图片名称                | “gmtplot” |
+
+### spiderplot
+
+| Function Name | Arguments  | Fucntion (Requirement)                        | Default                                      |
+|-----------------|-----------------|----------------------|-----------------|
+| spiderplot    | datain     | 输入数据集                                    |                                              |
+| spiderplot    | GrpSubjVar | 受试者编号变量                                |                                              |
+| spiderplot    | XaxisVar   | X轴变量                                       |                                              |
+| spiderplot    | YaxisVar   | Y轴变量                                       |                                              |
+| spiderplot    | GrpVar     | 线图分组变量                                  |                                              |
+| spiderplot    | YLine1     | 第1个Y轴参考线值                              | 20                                           |
+| spiderplot    | Yline2     | 第2个Y轴参考线值                              | -30                                          |
+| spiderplot    | colorSet   | 颜色设置（为CR, PR, SD, PD, NE 分别设置颜色） | c("blue", "red", "green", "black", "yellow") |
+| spiderplot    | XLabel     | X轴标签                                       |                                              |
+| spiderplot    | YLabel     | Y轴标签                                       |                                              |
+| spiderplot    | FigureName | 输出图片名称                                  | “spiderplot”                                 |
 
 ## Usage
 
@@ -490,6 +506,26 @@ swimmerplot(datain = swimmerdata,
 ```
 
 ![](images/swimmerplot.png)
+
+### spiderplot
+
+``` r
+spiderdata <- read_sas("f_spider.sas7bdat")
+
+spiderplot(datain = spiderdata,
+           GrpSubjVar = spiderdata$Subject,
+           XaxisVar = spiderdata$durx,
+           YaxisVar = spiderdata$chgx,
+           GrpVar = spiderdata$BOR,
+           YLine1 = 20,
+           Yline2 = -30,
+           colorSet = c("blue", "red", "green", "black", "yellow"),
+           XLabel = "Time Since Treatment Initiation (months)",
+           YLabel = "Tumor Change From Baseline",
+           FigureName = "spiderplot")
+```
+
+![](images/spiderplot.png)
 
 ## Additional Requirements
 

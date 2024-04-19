@@ -13,42 +13,56 @@ library(ggprism)
 devtools::document()
 load_all()
 
-swimmerdata <- read_excel("f_14_4_2_1_swimmer.xlsx",
-                          sheet="f_14_4_2_1_swimmer",
-                          col_names = TRUE)
+spiderdata <- read_sas("f_spider.sas7bdat")
 
-swimmerplot(datain = swimmerdata,
-            YaxisVar = swimmerdata$SUBJID,
-            BarVar = swimmerdata$trtedy,
-            BarColor = "grey",
-            BarWidth = 0.01,
-            BarLabel = "研究持续时间",
-            BarLabelY = 17,
-            Line1VarMin = swimmerdata$startdr,
-            Line1VarMax = swimmerdata$enddy,
-            Line1color = "blue",
-            Line1Width = 2,
-            Line1Label = "缓解持续时间",
-            Line1LabelY = 15,
-            Point1Var = swimmerdata$pddy,
-            Point1Color = "black",
-            Point1Shape = 15,
-            Point1Label = "疾病进展",
-            Point1LabelY = 13,
-            Point2Var = swimmerdata$dthdy,
-            Point2Color = "red",
-            Point2Shape = 16,
-            Point2Label = "死亡",
-            Point2LabelY = 11,
-            Segment1Var = swimmerdata$exongo,
-            Segment1Color = "brown",
-            Segment1Label = "治疗持续",
-            Segment1LabelY = 9,
-            XaxisLabel = "相对首次给药时间月",
-            YaxisLabel = "受试者编号",
-            figwidth = 9,
-            figheight = 5,
-            FigureName = "swimmerplot")
+spiderplot(datain = spiderdata,
+           GrpSubjVar = spiderdata$Subject,
+           XaxisVar = spiderdata$durx,
+           YaxisVar = spiderdata$chgx,
+           GrpVar = spiderdata$BOR,
+           YLine1 = 20,
+           Yline2 = -30,
+           colorSet = c("blue", "red", "green", "black", "yellow"),
+           XLabel = "Time Since Treatment Initiation (months)",
+           YLabel = "Tumor Change From Baseline",
+           FigureName = "spiderplot")
+
+# swimmerdata <- read_excel("f_14_4_2_1_swimmer.xlsx",
+#                           sheet="f_14_4_2_1_swimmer",
+#                           col_names = TRUE)
+#
+# swimmerplot(datain = swimmerdata,
+#             YaxisVar = swimmerdata$SUBJID,
+#             BarVar = swimmerdata$trtedy,
+#             BarColor = "grey",
+#             BarWidth = 0.01,
+#             BarLabel = "研究持续时间",
+#             BarLabelY = 17,
+#             Line1VarMin = swimmerdata$startdr,
+#             Line1VarMax = swimmerdata$enddy,
+#             Line1color = "blue",
+#             Line1Width = 2,
+#             Line1Label = "缓解持续时间",
+#             Line1LabelY = 15,
+#             Point1Var = swimmerdata$pddy,
+#             Point1Color = "black",
+#             Point1Shape = 15,
+#             Point1Label = "疾病进展",
+#             Point1LabelY = 13,
+#             Point2Var = swimmerdata$dthdy,
+#             Point2Color = "red",
+#             Point2Shape = 16,
+#             Point2Label = "死亡",
+#             Point2LabelY = 11,
+#             Segment1Var = swimmerdata$exongo,
+#             Segment1Color = "brown",
+#             Segment1Label = "治疗持续",
+#             Segment1LabelY = 9,
+#             XaxisLabel = "相对首次给药时间月",
+#             YaxisLabel = "受试者编号",
+#             figwidth = 9,
+#             figheight = 5,
+#             FigureName = "swimmerplot")
 
 # forestdata <- read_sas("forestdata.sas7bdat")
 #
@@ -132,6 +146,6 @@ swimmerplot(datain = swimmerdata,
 # devtools::check()
 #
 # use_readme_rmd()
-build_readme()
+# build_readme()
 
 
